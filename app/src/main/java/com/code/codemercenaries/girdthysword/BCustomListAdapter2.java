@@ -13,37 +13,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Joel Kingsley on 09-11-2017.
  */
 
-public class BCustomListAdapter2 extends ArrayAdapter<String> {
+public class BCustomListAdapter2 extends ArrayAdapter<ChapterDetail> {
     Context context;
     int resource;
-    String bookName;
-    List<Integer> chapters = new ArrayList<Integer>();
-    List<Integer> percents = new ArrayList<Integer>();
-    List<Integer> totalVerses = new ArrayList<Integer>();
-    List<Integer> memorizedVerses = new ArrayList<Integer>();
+    List<ChapterDetail> chapterDetails;
 
-    public BCustomListAdapter2(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> objects) {
+    public BCustomListAdapter2(@NonNull Context context, @LayoutRes int resource, @NonNull List<ChapterDetail> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
-
-        bookName = objects.get(0);
-        int n = objects.size();
-
-        DBHandler dbHandler = new DBHandler(context);
-
-        for(int i=1;i<=n;i++){
-            chapters.add(i);
-            totalVerses.add(dbHandler.getNumOfVerse(bookName,i));
-            memorizedVerses.add(dbHandler.getMemorizedVerses(bookName,i).size());
-        }
+        this.chapterDetails = objects;
     }
 
     @NonNull
@@ -51,10 +36,6 @@ public class BCustomListAdapter2 extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(this.resource,parent,false);
-
-
-
-
         ImageView imageView = (ImageView) rowView.findViewById(R.id.image);
         TextView heading = (TextView) rowView.findViewById(R.id.heading);
         TextView percent = (TextView) rowView.findViewById(R.id.percent);
@@ -62,9 +43,9 @@ public class BCustomListAdapter2 extends ArrayAdapter<String> {
 
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_menu_bible);
         imageView.setImageBitmap(bitmap);
-        heading.setText("Chapter " + chapters.get(position));
-        percent.setText(( (memorizedVerses.get(position)*100) / totalVerses.get(position) ) + "%");
-        number.setText(memorizedVerses.get(position) + "/" + totalVerses.get(position));
+        heading.setText("Chapter " + chapterDetails.get(position).getChapNum());
+        percent.setText(((chapterDetails.get(position).getPercentage()) / chapterDetails.get(position).gettotalVerses()) + "%");
+        number.setText(chapterDetails.get(position).getversesMemorized() + "/" + chapterDetails.get(position).gettotalVerses());
 
         return rowView;
     }

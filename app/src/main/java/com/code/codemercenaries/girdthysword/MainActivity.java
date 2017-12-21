@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.VideoView;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
     // Used to load the 'native-lib' library on application startup.
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseApp.initializeApp(this);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         // Example of a call to a native method
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
             // record the fact that the app has been started at least once
             systemPreferences.edit().putBoolean("initiated", false).apply();
+
 
             //dismiss loading screen
             handler.post(new Runnable() {

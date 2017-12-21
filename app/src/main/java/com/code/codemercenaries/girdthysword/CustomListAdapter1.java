@@ -34,6 +34,8 @@ public class CustomListAdapter1 extends ArrayAdapter<Chunk>{
         this.context = context;
         this.resource = resource;
         DBHandler dbHandler = new DBHandler(context);
+        /*DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("sections").child(FirebaseAuth.getInstance().getCurrentUser().getUid());*/
+
         for(int i=0;i<objects.size();i++) {
             this.objects.add(objects.get(i));
             this.heading.add(objects.get(i).toString());

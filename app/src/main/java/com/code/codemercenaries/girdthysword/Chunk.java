@@ -16,20 +16,63 @@ public class Chunk {
     int _space;
     boolean _mastered;
 
+
+    public Chunk(long _id, int _seq, String _book_name, int _chapter_num,
+                 int _start_verse_num, int _end_verse_num,
+                 String _next_date_of_review, int space, int _sec_id, boolean _mastered) {
+        this._id = -1;
+        this._seq = _seq;
+        this._book_name = _book_name;
+        this._chapter_num = _chapter_num;
+        this._start_verse_num = _start_verse_num;
+        this._end_verse_num = _end_verse_num;
+        this._next_date_of_review = _next_date_of_review;
+        this._space = space;
+        this._sec_id = -1;
+        this._mastered = _mastered;
+    }
+
+    public Chunk(int _seq, String _book_name, int _chapter_num,
+                 int _start_verse_num, int _end_verse_num,
+                 String _next_date_of_review, int _space, int _sec_id, boolean _mastered) {
+        this._seq = _seq;
+        this._book_name = _book_name;
+        this._chapter_num = _chapter_num;
+        this._start_verse_num = _start_verse_num;
+        this._end_verse_num = _end_verse_num;
+        this._next_date_of_review = _next_date_of_review;
+        this._space = _space;
+        this._sec_id = -1;
+        this._mastered = _mastered;
+    }
+
+    public Chunk() {
+        this._id = -1;
+        this._seq = 0;
+        this._book_name = "";
+        this._chapter_num = 0;
+        this._start_verse_num = 0;
+        this._end_verse_num = 0;
+        this._next_date_of_review = "";
+        this._space = 0;
+        this._sec_id = -1;
+        this._mastered = false;
+    }
+
+    public long getId() {
+        return _id;
+    }
+
+    public void setId(long _id) {
+        this._id = _id;
+    }
+
     public int getSecId() {
         return _sec_id;
     }
 
     public void setSecId(int _sec_id) {
         this._sec_id = _sec_id;
-    }
-
-    public long get_id() {
-        return _id;
-    }
-
-    public void set_id(long _id) {
-        this._id = _id;
     }
 
     public int getSeq() {
@@ -94,51 +137,6 @@ public class Chunk {
 
     public void setMastered(boolean _mastered) {
         this._mastered = _mastered;
-    }
-
-
-
-
-    public Chunk(long _id,int _seq,String _book_name,int _chapter_num,
-                 int _start_verse_num,int _end_verse_num,
-                 String _next_date_of_review, int space, int _sec_id, boolean _mastered){
-        this._id = _id;
-        this._seq = _seq;
-        this._book_name = _book_name;
-        this._chapter_num = _chapter_num;
-        this._start_verse_num = _start_verse_num;
-        this._end_verse_num = _end_verse_num;
-        this._next_date_of_review = _next_date_of_review;
-        this._space = space;
-        this._sec_id = _sec_id;
-        this._mastered = _mastered;
-    }
-
-    public Chunk(int _seq,String _book_name,int _chapter_num,
-                 int _start_verse_num,int _end_verse_num,
-                 String _next_date_of_review, int _space, int _sec_id, boolean _mastered){
-        this._seq = _seq;
-        this._book_name = _book_name;
-        this._chapter_num = _chapter_num;
-        this._start_verse_num = _start_verse_num;
-        this._end_verse_num = _end_verse_num;
-        this._next_date_of_review = _next_date_of_review;
-        this._space = _space;
-        this._sec_id = _sec_id;
-        this._mastered = _mastered;
-    }
-
-    public Chunk(){
-        this._id = 0;
-        this._seq = 0;
-        this._book_name = "";
-        this._chapter_num = 0;
-        this._start_verse_num = 0;
-        this._end_verse_num = 0;
-        this._next_date_of_review = "";
-        this._space = 0;
-        this._sec_id = 0;
-        this._mastered = false;
     }
 
     @Override

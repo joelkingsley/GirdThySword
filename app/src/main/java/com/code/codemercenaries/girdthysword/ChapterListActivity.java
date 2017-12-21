@@ -1,10 +1,12 @@
 package com.code.codemercenaries.girdthysword;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,15 +15,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 
 public class ChapterListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,9 +44,10 @@ public class ChapterListActivity extends AppCompatActivity
     ProgressDialog dialog;
     ListView chapList;
     TextView bt;
-
+    List<ChapterDetail> chapterDetails;
     String bookName;
-    boolean isEnd;
+    long numOfChapters;
+    BCustomListAdapter2 adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,20 +90,13 @@ public class ChapterListActivity extends AppCompatActivity
             bt.setText(bookName);
         }*/
 
-        final ProgressDialog dialog = ProgressDialog.show(ChapterListActivity.this, "",
-                "Loading. Please wait...", true);
-
-        DBHandler dbHandler = new DBHandler(this);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-            }
-        }, 47 * dbHandler.getNumofChap(bookName));
-
         if(bookName!=null){
             bt.setText(bookName);
+            Meta meta = new Meta();
+            chapterDetails = new ArrayList<>();
+            for (int i = 0; i < meta.numOfChap.get(meta.bookItems.indexOf(bookName)); i++) {
+                chapterDetails.add(new ChapterDetail());
+            }
             setupList();
         }
 
@@ -112,7 +119,7 @@ public class ChapterListActivity extends AppCompatActivity
 
     private void setupList() {
 
-        DBHandler dbHandler = new DBHandler(this);
+        /*DBHandler dbHandler = new DBHandler(this);
         List<String> objects = new ArrayList<String>();
 
         int n = dbHandler.getNumofChap(bookName);
@@ -120,9 +127,82 @@ public class ChapterListActivity extends AppCompatActivity
         for(int i=0;i<n;i++){
             objects.add(bookName);
         }
+        */
 
-        BCustomListAdapter2 adapter = new BCustomListAdapter2(this,R.layout.bible_custom_list2,objects);
+        final ProgressDialog progressDialog = ProgressDialog.show(ChapterListActivity.this, "",
+                "Loading User data. Please wait...", true);
+
+        if (isNetworkAvailable()) {
+            progressDialog.show();
+        }
+
+        final ProgressDialog progressDialog1 = ProgressDialog.show(ChapterListActivity.this, "",
+                "Loading Static data. Please wait...", true);
+
+        if (isNetworkAvailable()) {
+            progressDialog1.show();
+        }
+
+        DatabaseReference bible = FirebaseDatabase.getInstance().getReference("bible").child(bookName).child("chapters");
+        bible.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    numOfChapters = dataSnapshot.getChildrenCount();
+                    for (int i = 0; i < numOfChapters; i++) {
+                        //ChapterDetail chapterDetail = new ChapterDetail(bookName,i+1,(int)dataSnapshot.child(String.valueOf(i)).child("verses").getChildrenCount());
+                        chapterDetails.get(i).setBookName(bookName);
+                        chapterDetails.get(i).setChapNum(i + 1);
+                        chapterDetails.get(i).settotalVerses((int) dataSnapshot.child(String.valueOf(i)).child("verses").getChildrenCount());
+                        //chapterDetails.add(chapterDetail);
+                        Log.d("ChapterDetail:", chapterDetails.get(i).toString());
+                    }
+                    Log.d("Firebase:", "Static book data updated");
+                    progressDialog1.dismiss();
+                } else {
+                    progressDialog1.dismiss();
+                    Toast.makeText(ChapterListActivity.this, "Update is not available", Toast.LENGTH_LONG).show();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("Database Error:", databaseError.toString());
+                progressDialog1.dismiss();
+            }
+        });
+
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bookName);
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (int i = 0; i < chapterDetails.size(); i++) {
+                        chapterDetails.get(i).setversesMemorized((int) dataSnapshot.child(String.valueOf(i + 1)).getChildrenCount());
+                        chapterDetails.get(i).setPercentage((chapterDetails.get(i).getversesMemorized() / chapterDetails.get(i).gettotalVerses()) * 100);
+                    }
+                    Log.d("ChapterDetail-User:", "Do the needful");
+                } else {
+                    //Do nothing
+                    Log.d("ChapterDetail-User:", "Do nothing");
+                }
+                chapList.setAdapter(adapter);
+                Log.d("Firebase:", "Dynamic book data updated");
+                progressDialog.dismiss();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("Database Error:", databaseError.toString());
+                progressDialog.dismiss();
+            }
+        });
+
+        adapter = new BCustomListAdapter2(ChapterListActivity.this, R.layout.bible_custom_list2, chapterDetails);
         chapList.setAdapter(adapter);
+
         chapList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -204,5 +284,27 @@ public class ChapterListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    class Meta {
+        public List<String> bookItems = new ArrayList<>(Arrays.asList("Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua",
+                "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles",
+                "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes",
+                "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea",
+                "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai",
+                "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans",
+                "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians",
+                "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon",
+                "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"));
+
+        public List<Integer> numOfChap = new ArrayList<>(Arrays.asList(50, 40, 27, 36, 34, 24, 21, 4, 31, 24, 22, 25, 29, 36, 10, 13, 10, 42, 150, 31, 12, 8, 66, 52, 5, 48,
+                12, 14, 3, 9, 1, 4, 7, 3, 3, 3, 2, 14, 4, 28, 16, 24, 21, 28, 16, 16, 13, 6, 6, 4, 4, 5, 3, 6, 4, 3, 1, 13, 5, 5, 3, 5, 1, 1, 1, 22));
     }
 }

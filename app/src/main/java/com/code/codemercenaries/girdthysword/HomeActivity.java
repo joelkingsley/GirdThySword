@@ -1,7 +1,10 @@
 package com.code.codemercenaries.girdthysword;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -58,6 +61,11 @@ public class HomeActivity extends AppCompatActivity
 
     String theme;
 
+    List<Chunk> allChunks;
+    List<Chunk> todayChunks;
+    List<Chunk> overdueChunks;
+    List<Chunk> tomorrowChunks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +107,7 @@ public class HomeActivity extends AppCompatActivity
         tools.setTitle(s);
 
         navigationView.setNavigationItemSelectedListener(this);
-        mAuth = FirebaseAuth.getInstance();
+
         setupTabHost();
     }
 
@@ -107,21 +115,10 @@ public class HomeActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
+        mAuth = FirebaseAuth.getInstance();
+
         try {
-            theme = settingsPreferences.getString("theme", "original");
-            if (theme.equals("original")) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                back.setBackgroundColor(getResources().getColor(R.color.colorSword));
-                layTab.setBackgroundColor(getResources().getColor(R.color.colorSword));
-            } else if (theme.equals("dark")) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.colorSword));
-                back.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                layTab.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            } else if (theme.equals("white")) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                back.setBackgroundColor(getResources().getColor(android.R.color.white));
-                layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
-            }
+            setupColors();
             setupLists();
 
         } catch (ParseException e) {
@@ -130,13 +127,25 @@ public class HomeActivity extends AppCompatActivity
         setupFabs();
     }
 
+    private void setupColors() {
+        theme = settingsPreferences.getString("theme", "original");
+        if (theme.equals("original")) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            back.setBackgroundColor(getResources().getColor(R.color.colorSword));
+            layTab.setBackgroundColor(getResources().getColor(R.color.colorSword));
+        } else if (theme.equals("dark")) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorSword));
+            back.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            layTab.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        } else if (theme.equals("white")) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            back.setBackgroundColor(getResources().getColor(android.R.color.white));
+            layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
+        }
+    }
+
 
     private void setupLists() throws ParseException {
-
-        final List<Chunk> todayChunks;
-        final List<Chunk> overdueChunks;
-        final List<Chunk> tomorrowChunks;
-        List<Chunk> allChunks;
 
         DBHandler dbHandler = new DBHandler(this);
 
@@ -150,10 +159,29 @@ public class HomeActivity extends AppCompatActivity
         dbHandler.addSection(new Section("Romans",4,5,7,2));
         dbHandler.addSection(new Section("Romans",1,1,3,3));*/
 
-
+        allChunks = new ArrayList<Chunk>();
         todayChunks = new ArrayList<Chunk>();
         overdueChunks = new ArrayList<Chunk>();
         tomorrowChunks = new ArrayList<Chunk>();
+
+        /*DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("chunks").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot d: dataSnapshot.getChildren()){
+                        allChunks.add(d.getValue(Chunk.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("DatabaseError:",databaseError.toString());
+            }
+        });*/
+
         allChunks = dbHandler.getAllChunks();
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -194,7 +222,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(HomeActivity.this,ReviewActivity.class);
-                intent.putExtra("EXTRA_CHUNK_ID", todayChunks.get(i).get_id());
+                intent.putExtra("EXTRA_CHUNK_ID", todayChunks.get(i).getId());
                 startActivity(intent);
             }
         });
@@ -205,7 +233,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(HomeActivity.this,ReviewActivity.class);
-                intent.putExtra("EXTRA_CHUNK_ID", overdueChunks.get(i).get_id());
+                intent.putExtra("EXTRA_CHUNK_ID", overdueChunks.get(i).getId());
                 startActivity(intent);
             }
         });
@@ -398,5 +426,12 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

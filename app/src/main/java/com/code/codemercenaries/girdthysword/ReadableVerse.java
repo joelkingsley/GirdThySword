@@ -12,7 +12,28 @@ public class ReadableVerse {
     String _verse_text;
     int _memory;
 
+    public ReadableVerse(String _book_name, int _chap_num, int _verse_num, String _verse_text) {
+        this._book_name = _book_name;
+        this._chap_num = _chap_num;
+        this._verse_num = _verse_num;
+        this._verse_text = _verse_text;
+    }
 
+    public ReadableVerse(String _book_name, int _chap_num, int _verse_num, String _verse_text, int _memory) {
+        this._book_name = _book_name;
+        this._chap_num = _chap_num;
+        this._verse_num = _verse_num;
+        this._verse_text = _verse_text;
+        this._memory = _memory;
+    }
+
+    public ReadableVerse() {
+        this._book_name = "";
+        this._chap_num = 0;
+        this._verse_num = 0;
+        this._verse_text = "";
+        this._memory = -1;
+    }
 
     public long get_id() {
         return _id;

@@ -27,6 +27,7 @@ public class ReviewActivity extends AppCompatActivity {
     List<ReadableVerse> readableVerseList = new ArrayList<ReadableVerse>();
     List<StringTokenizer> tokenList = new ArrayList<StringTokenizer>();
     List<String> speakableText = new ArrayList<String>();
+    List<String> hintText = new ArrayList<String>();
     int currentVerseIndex;
     float totalMatchScore;
     //Review Layout
@@ -62,11 +63,15 @@ public class ReviewActivity extends AppCompatActivity {
         }
         for(int i=0;i<tokenList.size();i++){
             StringBuilder text = new StringBuilder();
+            StringBuilder hint = new StringBuilder();
             while(tokenList.get(i).hasMoreTokens()){
-                text.append(tokenList.get(i).nextToken());
+                String token = tokenList.get(i).nextToken();
+                text.append(token);
                 text.append(" ");
+
             }
             speakableText.add(text.toString().trim());
+            hintText.add(text.toString().trim());
         }
         currentVerseIndex = 0;
         totalMatchScore = 0;

@@ -18,20 +18,12 @@ import java.util.List;
  */
 
 public class DBHandler extends SQLiteAssetHelper {
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "main.db";
-
-    private static final String TABLE_BIBLE = "bible";
-    private static final String TABLE_CHUNK = "chunk";
-    private static final String TABLE_SECTION = "section";
-
     public static final String B_KEY_ID = "id";
     public static final String B_KEY_BOOK_NAME = "book_name";
     public static final String B_KEY_CHAP_NUM = "chapter_num";
     public static final String B_KEY_VERSE_NUM = "verse_num";
     public static final String B_KEY_VERSE_TEXT = "verse_text";
     public static final String B_KEY_MEMORY = "memory";
-
     public static final String C_KEY_ID = "id";
     public static final String C_KEY_SEQ = "seq";
     public static final String C_KEY_BOOK_NAME = "book_name";
@@ -42,13 +34,17 @@ public class DBHandler extends SQLiteAssetHelper {
     public static final String C_KEY_SPACE = "space";
     public static final String C_KEY_SEC_ID = "sec_id";
     public static final String C_KEY_MASTERED = "mastered";
-
     public static final String S_KEY_ID = "id";
     public static final String S_KEY_BOOK_NAME = "book_name";
     public static final String S_KEY_CHAP_NUM = "chapter_num";
     public static final String S_KEY_START_VERSE_NUM = "start_verse_num";
     public static final String S_KEY_END_VERSE_NUM = "end_verse_num";
     public static final String S_KEY_SEC_ID = "sec_id";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "main.db";
+    private static final String TABLE_BIBLE = "bible";
+    private static final String TABLE_CHUNK = "chunk";
+    private static final String TABLE_SECTION = "section";
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -440,7 +436,7 @@ public class DBHandler extends SQLiteAssetHelper {
         return true;
     }
 
-    public List<Chunk> getChunksOfSection(int sec_id) {
+    public List<Chunk> getChunksOfSection(String sec_id) {
         List<Chunk> chunks = new ArrayList<Chunk>();
 
         SQLiteDatabase db = getWritableDatabase();
@@ -449,7 +445,7 @@ public class DBHandler extends SQLiteAssetHelper {
         if(cursor.moveToFirst()){
             do{
                 Chunk chunk = new Chunk();
-                chunk.set_id(Long.parseLong(cursor.getString(0)));
+                chunk.setId(Long.parseLong(cursor.getString(0)));
                 chunk.setSeq(Integer.parseInt(cursor.getString(1)));
                 chunk.setBookName(cursor.getString(2));
                 chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
@@ -500,7 +496,7 @@ public class DBHandler extends SQLiteAssetHelper {
         if (cursor.moveToFirst()) {
             do {
                 Chunk chunk = new Chunk();
-                chunk.set_id(Integer.parseInt(cursor.getString(0)));
+                chunk.setId(Long.parseLong(cursor.getString(0)));
                 chunk.setSeq(Integer.parseInt(cursor.getString(1)));
                 chunk.setBookName(cursor.getString(2));
                 chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
@@ -526,7 +522,7 @@ public class DBHandler extends SQLiteAssetHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
-            chunk.set_id(Long.parseLong(cursor.getString(0)));
+            chunk.setId(Long.parseLong(cursor.getString(0)));
             chunk.setSeq(Integer.parseInt(cursor.getString(1)));
             chunk.setBookName(cursor.getString(2));
             chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
@@ -580,7 +576,7 @@ public class DBHandler extends SQLiteAssetHelper {
             cv.put(C_KEY_MASTERED,c.isMastered());
         }
 
-        db.update(TABLE_CHUNK,cv,"id="+c.get_id(),null);
+        db.update(TABLE_CHUNK, cv, "id=" + c.getId(), null);
     }
 
     public Chunk getNextChunk(long id){
@@ -589,7 +585,7 @@ public class DBHandler extends SQLiteAssetHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
-            chunk.set_id(Long.parseLong(cursor.getString(0)));
+            chunk.setId(Long.parseLong(cursor.getString(0)));
             chunk.setSeq(Integer.parseInt(cursor.getString(1)));
             chunk.setBookName(cursor.getString(2));
             chunk.setChapNum(Integer.parseInt(cursor.getString(3)));

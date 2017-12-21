@@ -1,7 +1,11 @@
 package com.code.codemercenaries.girdthysword;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +28,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,8 +78,41 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
+                    if (mAuth.getCurrentUser() != null) {
+                        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+
+                        progressDialog.setMessage("Loading Data from Firebase Database");
+
+                        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
+
+                        if (isNetworkAvailable()) {
+                            progressDialog.show();
+                        }
+
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.child("registered").getValue(boolean.class) != null) {
+                                    Log.d("Firebase:", "Logged in");
+                                } else {
+                                    dataSnapshot.getRef().setValue(new User(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail()));
+                                    Log.d("Firebase:", "Created new user");
+                                }
+                                //theme = dataSnapshot.child("theme").getValue(String.class);
+                                progressDialog.dismiss();
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d("Firebase:", "Initialization failed");
+                                Log.d("DatabaseError", databaseError.toString());
+                                progressDialog.dismiss();
+                                Toast.makeText(LoginActivity.this, "Initialization failed", Toast.LENGTH_LONG);
+                            }
+                        });
+                    }
                 }
             }
         };
@@ -150,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -167,5 +210,12 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

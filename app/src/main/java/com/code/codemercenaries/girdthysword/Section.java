@@ -26,7 +26,15 @@ public class Section {
         this._chap_num = -123;
         this._start_verse_num = -1;
         this._end_verse_num = -1;
-        this._sec_id = 0;
+        this._sec_id = -1;
+    }
+
+    public Section(String _book_name, int _chap_num, int _start_verse_num, int _end_verse_num) {
+        this._book_name = _book_name;
+        this._chap_num = _chap_num;
+        this._start_verse_num = _start_verse_num;
+        this._end_verse_num = _end_verse_num;
+        this._sec_id = -1;
     }
 
     public long get_id() {
@@ -68,6 +76,7 @@ public class Section {
     public void set_end_verse_num(int _end_verse_num) {
         this._end_verse_num = _end_verse_num;
     }
+
 
     public int get_sec_id() {
         return _sec_id;
