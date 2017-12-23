@@ -81,6 +81,7 @@ class ChapterDetail {
                 "bookName='" + bookName + '\'' +
                 ", chapNum=" + chapNum +
                 ", totalVerses=" + totalVerses +
+                ", versesMemorized=" + versesMemorized +
                 '}';
     }
 }

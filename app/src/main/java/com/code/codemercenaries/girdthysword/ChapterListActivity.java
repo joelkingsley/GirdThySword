@@ -24,7 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -119,8 +118,8 @@ public class ChapterListActivity extends AppCompatActivity
 
     private void setupList() {
 
-        /*DBHandler dbHandler = new DBHandler(this);
-        List<String> objects = new ArrayList<String>();
+        DBHandler dbHandler = new DBHandler(this);
+        /*List<String> objects = new ArrayList<String>();
 
         int n = dbHandler.getNumofChap(bookName);
 
@@ -129,12 +128,12 @@ public class ChapterListActivity extends AppCompatActivity
         }
         */
 
-        final ProgressDialog progressDialog = ProgressDialog.show(ChapterListActivity.this, "",
+        /*final ProgressDialog progressDialog = ProgressDialog.show(ChapterListActivity.this, "",
                 "Loading User data. Please wait...", true);
 
         if (isNetworkAvailable()) {
             progressDialog.show();
-        }
+        }*/
 
         final ProgressDialog progressDialog1 = ProgressDialog.show(ChapterListActivity.this, "",
                 "Loading Static data. Please wait...", true);
@@ -173,7 +172,7 @@ public class ChapterListActivity extends AppCompatActivity
             }
         });
 
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bookName);
+        /*DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bookName);
         userReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -198,7 +197,12 @@ public class ChapterListActivity extends AppCompatActivity
                 Log.d("Database Error:", databaseError.toString());
                 progressDialog.dismiss();
             }
-        });
+        });*/
+
+        for (int i = 0; i < chapterDetails.size(); i++) {
+            chapterDetails.get(i).setversesMemorized(dbHandler.getMemorizedVerses(bookName, i + 1).size());
+            chapterDetails.get(i).setPercentage((chapterDetails.get(i).getversesMemorized() / chapterDetails.get(i).gettotalVerses()) * 100);
+        }
 
         adapter = new BCustomListAdapter2(ChapterListActivity.this, R.layout.bible_custom_list2, chapterDetails);
         chapList.setAdapter(adapter);

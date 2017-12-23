@@ -27,9 +27,10 @@ public class ReviewActivity extends AppCompatActivity {
     List<ReadableVerse> readableVerseList = new ArrayList<ReadableVerse>();
     List<StringTokenizer> tokenList = new ArrayList<StringTokenizer>();
     List<String> speakableText = new ArrayList<String>();
-    List<String> hintText = new ArrayList<String>();
     int currentVerseIndex;
     float totalMatchScore;
+    int initialSpace;
+
     //Review Layout
     TextView vt;
     TextView st;
@@ -56,6 +57,8 @@ public class ReviewActivity extends AppCompatActivity {
         DBHandler dbHandler = new DBHandler(this);
         id = getIntent().getLongExtra("EXTRA_CHUNK_ID",-1);
         chunk = dbHandler.getChunk(id);
+        initialSpace = chunk.getSpace();
+
         for(int i=chunk.getStartVerseNum();i<=chunk.getEndVerseNum();i++){
             ReadableVerse verse = dbHandler.getReadableVerse(chunk.getBookName(),chunk.getChapNum(),i);
             readableVerseList.add(verse);
@@ -63,15 +66,11 @@ public class ReviewActivity extends AppCompatActivity {
         }
         for(int i=0;i<tokenList.size();i++){
             StringBuilder text = new StringBuilder();
-            StringBuilder hint = new StringBuilder();
             while(tokenList.get(i).hasMoreTokens()){
-                String token = tokenList.get(i).nextToken();
-                text.append(token);
+                text.append(tokenList.get(i).nextToken());
                 text.append(" ");
-
             }
             speakableText.add(text.toString().trim());
-            hintText.add(text.toString().trim());
         }
         currentVerseIndex = 0;
         totalMatchScore = 0;
@@ -87,6 +86,9 @@ public class ReviewActivity extends AppCompatActivity {
     private void review() {
         if(currentVerseIndex<readableVerseList.size()){
             heading.setText(readableVerseList.get(currentVerseIndex).toString());
+            if (initialSpace >= 2) {
+                vt.setVisibility(View.INVISIBLE);
+            }
             vt.setText(speakableText.get(currentVerseIndex));
             st.setText("");
             completed.setText(currentVerseIndex + "/" + readableVerseList.size() + " Completed");

@@ -39,7 +39,7 @@ public class CustomListAdapter1 extends ArrayAdapter<Chunk>{
         for(int i=0;i<objects.size();i++) {
             this.objects.add(objects.get(i));
             this.heading.add(objects.get(i).toString());
-            this.subheading.add(dbHandler.retSection(objects.get(i).getSecId()).toString());
+            this.subheading.add(objects.get(i).getBookName() + " " + objects.get(i).getChapNum() + ":" + dbHandler.retSection(objects.get(i).getSecId()).get_start_verse_num() + "-" + dbHandler.retSection(objects.get(i).getSecId()).get_end_verse_num());
         }
     }
 
