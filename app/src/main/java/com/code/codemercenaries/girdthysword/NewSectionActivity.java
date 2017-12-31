@@ -236,12 +236,11 @@ public class NewSectionActivity extends AppCompatActivity {
     public void addItemsOnStartVerseSpinner(final String bookName, final int chapNum){
         spinner3 = (Spinner) findViewById(R.id.spinner3);
         availStartVerses = new ArrayList<>();
-
         DBHandler dbHandler = new DBHandler(this);
         numOfVerse = dbHandler.getNumOfVerse(bookName, chapNum);
-        for (int i = 1; i <= numOfVerse; i++) {
+        /*for (int i = 1; i <= numOfVerse; i++) {
             availStartVerses.add(i);
-        }
+        }*/
         availStartVerses = dbHandler.getAvailableVersesOfChap(bookName,chapNum);
 
         /*final ProgressDialog progressDialog1 = ProgressDialog.show(NewSectionActivity.this, "",

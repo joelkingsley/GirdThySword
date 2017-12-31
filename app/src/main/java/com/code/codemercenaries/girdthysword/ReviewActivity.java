@@ -116,19 +116,19 @@ public class ReviewActivity extends AppCompatActivity {
         int length = vt.getText().length();
         int levDistance = unlimitedCompare(vt.getText().toString().toLowerCase().replaceAll(",",""),st.getText());
 
-        float matchPercentage = 100 - ((float)levDistance/(float)length) *100;
+        final float matchPercentage = 100 - ((float) levDistance / (float) length) * 100;
         if(matchPercentage>=85){
-            totalMatchScore+= matchPercentage;
+            //totalMatchScore+= matchPercentage;
             Toast.makeText(ReviewActivity.this, "Awesome!! : " + matchPercentage + "% Accuracy",
                     Toast.LENGTH_LONG).show();
         }
         else if(matchPercentage>=60 && matchPercentage<85){
-            totalMatchScore+= matchPercentage;
+            //totalMatchScore+= matchPercentage;
             Toast.makeText(ReviewActivity.this, "Good Job! : " + matchPercentage + "% Accuracy",
                     Toast.LENGTH_LONG).show();
         }
         else{
-            totalMatchScore+= matchPercentage;
+            //totalMatchScore+= matchPercentage;
             Toast.makeText(ReviewActivity.this, "Try Again : " + matchPercentage + "% Accuracy",
                     Toast.LENGTH_LONG).show();
         }
@@ -136,6 +136,7 @@ public class ReviewActivity extends AppCompatActivity {
         continue_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                totalMatchScore += matchPercentage;
                 currentVerseIndex++;
                 count++;
                 review();

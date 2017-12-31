@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (mAuth.getCurrentUser() != null) {
                         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
 
-                        progressDialog.setMessage("Loading Data from Firebase Database");
+                        progressDialog.setMessage("Downloading Data from Firebase Database");
 
                         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
 
