@@ -375,6 +375,7 @@ public class DBHandler extends SQLiteAssetHelper {
                 s.set_start_verse_num(Integer.parseInt(cursor.getString(3)));
                 s.set_end_verse_num(Integer.parseInt(cursor.getString(4)));
                 s.set_sec_id(secId);
+                Log.d("Ret Section:", s.toString());
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -389,7 +390,9 @@ public class DBHandler extends SQLiteAssetHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if(cursor.moveToFirst()){
             do{
-                sections.add(Integer.parseInt(cursor.getString(0)));
+                Integer id = Integer.parseInt(cursor.getString(0));
+                sections.add(id);
+                Log.d("Ret SecID:", id.toString());
             }while(cursor.moveToNext());
         }
         return sections;

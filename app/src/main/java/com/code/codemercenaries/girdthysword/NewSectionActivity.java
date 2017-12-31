@@ -28,6 +28,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class NewSectionActivity extends AppCompatActivity {
 
     final String INDEX_PREF = "index_pref";
@@ -64,6 +67,11 @@ public class NewSectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.default_font))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.activity_new_section);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,6 +105,11 @@ public class NewSectionActivity extends AppCompatActivity {
 
         /*databaseReference = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());*/
         addItemsOnBookNameSpinner();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -471,7 +484,7 @@ public class NewSectionActivity extends AppCompatActivity {
             }
         });*/
 
-        Toast.makeText(NewSectionActivity.this, "Added " + bookName + " " + chapNum + ":" + startVerse + "-" + endVerse,
+        Toast.makeText(NewSectionActivity.this, "Added " + section.toString() + ":" + secId,
                 Toast.LENGTH_LONG).show();
         Intent intent = new Intent(NewSectionActivity.this,HomeActivity.class);
         startActivity(intent);

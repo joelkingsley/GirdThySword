@@ -1,6 +1,7 @@
 package com.code.codemercenaries.girdthysword;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -14,6 +15,9 @@ import android.widget.VideoView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.default_font))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.activity_main);
 
         FirebaseApp.initializeApp(this);
@@ -77,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
             settingsPreferences.edit().putInt("chunk_size", 3).apply();
             settingsPreferences.edit().putString("theme", "original").apply();
+            settingsPreferences.edit().putString("font", getString(R.string.default_font_name)).apply();
 
             for(int i=0;i<66;i++){
                 indexPreferences.edit().putBoolean(bookNames[i], false).apply();
@@ -100,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
         else{
         }
         videoView.start();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

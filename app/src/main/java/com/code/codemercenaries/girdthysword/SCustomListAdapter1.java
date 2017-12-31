@@ -23,7 +23,7 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
     int resource;
     Context context;
     SharedPreferences settingsPreferences;
-    private int settingsItemsSize = 2;
+    private int settingsItemsSize = 3;
 
 
     public SCustomListAdapter1(@NonNull Context context, int resource) {
@@ -72,6 +72,24 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
                 }
             });
         }
+        if (position == 2) {
+            TextView title = (TextView) rowView.findViewById(R.id.title);
+            TextView desc = (TextView) rowView.findViewById(R.id.desc);
+            TextView fontValue = (TextView) rowView.findViewById(R.id.value);
+
+            title.setText("Font");
+            desc.setText("Typeface of the app");
+
+            String font = settingsPreferences.getString("font", context.getString(R.string.default_font_name));
+            fontValue.setText(font);
+
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setFont(v);
+                }
+            });
+        }
         return rowView;
     }
 
@@ -82,7 +100,6 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
 
     public void setChunkSize(final View v) {
         CharSequence sizes[] = new CharSequence[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-        /*List<Integer> sizes = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9,10));*/
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Pick a size");
@@ -113,6 +130,24 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
                         Toast.LENGTH_LONG).show();
                 TextView tv = v.findViewById(R.id.value);
                 tv.setText(themes[pos]);
+            }
+        });
+        builder.show();
+    }
+
+    public void setFont(final View v) {
+        final String fonts[] = new String[]{context.getString(R.string.default_font_name)};
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Pick a font");
+        builder.setItems(fonts, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int pos) {
+
+                settingsPreferences.edit().putString("font", fonts[pos]).apply();
+                Toast.makeText(context, "Font changed to " + fonts[pos],
+                        Toast.LENGTH_LONG).show();
+                TextView tv = v.findViewById(R.id.value);
+                tv.setText(fonts[pos]);
             }
         });
         builder.show();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dip">
@@ -17,13 +18,14 @@
 
     <TextView
         android:id="@+id/text"
+        fontPath="fonts/gnuolane_rg.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/number"
         android:layout_centerVertical="true"
-        android:layout_marginTop="0dp"
         android:layout_marginStart="30dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="@string/psalm_1_1" />
+        android:layout_marginTop="0dp"
+        android:text="@string/psalm_1_1"
+        tools:ignore="MissingPrefix" />
 
 </RelativeLayout>
