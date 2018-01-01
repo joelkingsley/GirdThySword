@@ -3,6 +3,7 @@ package com.code.codemercenaries.girdthysword;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,9 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,6 +33,10 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.takusemba.spotlight.OnSpotlightEndedListener;
+import com.takusemba.spotlight.OnSpotlightStartedListener;
+import com.takusemba.spotlight.SimpleTarget;
+import com.takusemba.spotlight.Spotlight;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +52,7 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     final String SETTINGS_PREF = "settings_pref";
+    final String SYSTEM_PREF = "system_pref";
     CoordinatorLayout coordinatorLayout;
     TabHost tabHost;
     ListView today;
@@ -61,6 +70,7 @@ public class HomeActivity extends AppCompatActivity
     Toolbar toolbar;
     SharedPreferences settingsPreferences;
     FirebaseAuth mAuth;
+    DrawerLayout drawerLayout;
 
     String theme;
 
@@ -73,11 +83,13 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.default_font))
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+        }
         setContentView(R.layout.activity_home);
         settingsPreferences = getSharedPreferences(SETTINGS_PREF, 0);
         theme = settingsPreferences.getString("theme", "original");
@@ -86,6 +98,7 @@ public class HomeActivity extends AppCompatActivity
         back = (LinearLayout) findViewById(R.id.back);
         layTab = (RelativeLayout) findViewById(R.id.layTab);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         tabHost = (TabHost) findViewById(R.id.tabhost); // initiate TabHost
         today = (ListView) findViewById(R.id.today_list);
@@ -117,6 +130,10 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         setupTabHost();
+        if (getSharedPreferences(SYSTEM_PREF, 0).getBoolean("show_tutorial_nav", true)) {
+            startTutorialNav();
+        }
+
     }
 
     @Override
@@ -138,6 +155,15 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
         setupFabs();
+
+    }
+
+    private Point getCenterPointOfView(View view) {
+        int[] location = new int[2];
+        view.getLocationInWindow(location);
+        int x = location[0] + view.getWidth() / 2;
+        int y = location[1] + view.getHeight() / 2;
+        return new Point(x, y);
     }
 
     private void setupColors() {
@@ -299,6 +325,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
+
     }
 
     private void fab_show() {
@@ -386,6 +413,7 @@ public class HomeActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
         return true;
     }
 
@@ -447,4 +475,78 @@ public class HomeActivity extends AppCompatActivity
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    public void startTutorialHome() {
+        fab.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                fab.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                final Tutorial tutorial1 = new Tutorial(HomeActivity.this, fab, 200f, "Manage Sections", "Click on this floating button to add and delete sections to memorize");
+                final Tutorial tutorial2 = new Tutorial(HomeActivity.this, new Point(100, 300), 800f, "Today List", "Displays the list of chunks that are scheduled for evaluation today");
+
+                final SimpleTarget target1 = tutorial1.generateTarget();
+                final SimpleTarget target2 = tutorial2.generateTarget();
+
+                Spotlight.with(HomeActivity.this)
+                        .setDuration(600L) // duration of Spotlight emerging and disappearing in ms
+                        .setAnimation(new DecelerateInterpolator(2f)) // animation of Spotlight
+                        .setTargets(target1, target2) // set targets. see below for more info
+                        .setOnSpotlightStartedListener(new OnSpotlightStartedListener() { // callback when Spotlight starts
+                            @Override
+                            public void onStarted() {
+                                //Toast.makeText(HomeActivity.this, "spotlight is started", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setOnSpotlightEndedListener(new OnSpotlightEndedListener() { // callback when Spotlight ends
+                            @Override
+                            public void onEnded() {
+                                //Toast.makeText(HomeActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .start(); // start Spotlight
+            }
+        });
+        getSharedPreferences(SYSTEM_PREF, 0).edit().putBoolean("show_tutorial_home", false).apply();
+    }
+
+    private void startTutorialNav() {
+        drawerLayout.openDrawer(Gravity.LEFT);
+        drawerLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                drawerLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                final Tutorial tutorial1 = new Tutorial(HomeActivity.this, new Point(100, 770), 200f, "Home", "The Home screen is the default screen through which you can add, delete or review sections that you want to memorize");
+                final Tutorial tutorial2 = new Tutorial(HomeActivity.this, new Point(100, 970), 200f, "Bible", "This is the integrated Bible which also contains information on the verses you've memorized");
+
+                final SimpleTarget target1 = tutorial1.generateTarget();
+                final SimpleTarget target2 = tutorial2.generateTarget();
+
+                Spotlight.with(HomeActivity.this)
+                        .setDuration(600L) // duration of Spotlight emerging and disappearing in ms
+                        .setAnimation(new DecelerateInterpolator(2f)) // animation of Spotlight
+                        .setTargets(target1, target2) // set targets. see below for more info
+                        .setOnSpotlightStartedListener(new OnSpotlightStartedListener() { // callback when Spotlight starts
+                            @Override
+                            public void onStarted() {
+                                //Toast.makeText(HomeActivity.this, "spotlight is started", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setOnSpotlightEndedListener(new OnSpotlightEndedListener() { // callback when Spotlight ends
+                            @Override
+                            public void onEnded() {
+                                //Toast.makeText(HomeActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
+                                drawerLayout.closeDrawer(Gravity.LEFT);
+                                if (getSharedPreferences(SYSTEM_PREF, 0).getBoolean("show_tutorial_home", true)) {
+                                    startTutorialHome();
+                                }
+                            }
+                        })
+                        .start(); // start Spotlight
+            }
+        });
+        getSharedPreferences(SYSTEM_PREF, 0).edit().putBoolean("show_tutorial_nav", false).apply();
+    }
+
 }

@@ -32,11 +32,14 @@ public class DeleteSectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.default_font))
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+        final String SETTINGS_PREF = "settings_pref";
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+        }
         setContentView(R.layout.activity_delete_section);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -1,7 +1,6 @@
 package com.code.codemercenaries.girdthysword;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -15,9 +14,6 @@ import android.widget.VideoView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
-
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.default_font))
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+        /*if(getSharedPreferences(SETTINGS_PREF, 0).getString("font",getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))){
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+        }*/
         setContentView(R.layout.activity_main);
 
         FirebaseApp.initializeApp(this);
@@ -98,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
             // record the fact that the app has been started at least once
             systemPreferences.edit().putBoolean("initiated", false).apply();
 
-
             //dismiss loading screen
             handler.post(new Runnable() {
                 @Override
@@ -112,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
         videoView.start();
     }
 
-    @Override
+    /*@Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+    }*/
 
     @Override
     protected void onResume() {

@@ -55,11 +55,14 @@ public class ChapterListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.default_font))
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+        final String SETTINGS_PREF = "settings_pref";
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+        }
         //final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
         setContentView(R.layout.activity_chapter_list);

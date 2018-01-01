@@ -25,6 +25,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class AboutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    final String SETTINGS_PREF = "settings_pref";
     Button report;
     Button feedback;
     Button source;
@@ -33,11 +34,14 @@ public class AboutActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.default_font))
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+        }
         setContentView(R.layout.activity_about);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -126,6 +130,12 @@ public class AboutActivity extends AppCompatActivity
 
             }
         });
+
+        /*new ShowcaseView.Builder(AboutActivity.this, true)
+                .setTarget(new ViewTarget(R.id.imageView2,this))
+                .setContentTitle("Logo")
+                .setContentText("content").build();*/
+
     }
 
     @Override
