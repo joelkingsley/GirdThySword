@@ -44,6 +44,12 @@ public class VerseListActivity extends AppCompatActivity {
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
+        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.coolvetica_font))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
         }
         setContentView(R.layout.activity_verse_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -49,11 +49,11 @@ public class AnswerActivity extends AppCompatActivity
             , "How do I report a bug or request a feature?"));
 
     List<String> answers = new ArrayList<>(Arrays.asList("First, you'll add a section of the " +
-                    "Bible that you want to memorize. Once you press ADD the app will break down the section " +
+                    "Bible that you want to memorize. Once you press ADD, the app will break down the section " +
                     "into chunks of equal size(you can change the chunk size in the settings menu). Then as " +
                     "you memorize the chunks that are assigned to you daily, you will click on the chunk and " +
                     "review by reciting the verses of that chunk. Depending upon how accurate you recite it, " +
-                    "the next date of review will be set. In the Bible which is integrated, the verses " +
+                    "the next date of review will be scheduled. In the Bible which is integrated, the verses " +
                     "you've memorized will appear GREEN, and the verses added for memorization will appear YELLOW.",
 
             "You can add new sections by pressing the floating button in the bottom right corner of " +
@@ -86,6 +86,12 @@ public class AnswerActivity extends AppCompatActivity
         if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                     .setDefaultFontPath(getString(R.string.default_font))
+                    .setFontAttrId(R.attr.fontPath)
+                    .build()
+            );
+        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
+            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getString(R.string.coolvetica_font))
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );

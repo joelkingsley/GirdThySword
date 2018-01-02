@@ -56,6 +56,8 @@
     <string name="default_settings_list_title">Chunk Size</string>
     <string name="default_font">fonts/gnuolane_rg.ttf</string>
     <string name="default_font_name">gnuolane_rg</string>
+    <string name="coolvetica_font_name">coolvetica_rg</string>
+    <string name="coolvetica_font">fonts/coolvetica_rg.ttf</string>
 
     <!-- Strings related to stats -->
     <string name="stats_text">Number of Reviews:0\nNumber of Chapters memorized:0</string>

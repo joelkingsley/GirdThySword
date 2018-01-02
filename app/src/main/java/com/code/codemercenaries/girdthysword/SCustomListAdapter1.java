@@ -1,9 +1,11 @@
 package com.code.codemercenaries.girdthysword;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,10 +22,12 @@ import android.widget.Toast;
 public class SCustomListAdapter1 extends ArrayAdapter<String> {
 
     final String SETTINGS_PREF = "settings_pref";
+    final String SYSTEM_PREF = "system_pref";
     int resource;
     Context context;
+    Activity activity;
     SharedPreferences settingsPreferences;
-    private int settingsItemsSize = 3;
+    private int settingsItemsSize = 4;
 
 
     public SCustomListAdapter1(@NonNull Context context, int resource) {
@@ -33,9 +37,17 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
         settingsPreferences = context.getSharedPreferences(SETTINGS_PREF, 0);
     }
 
+    public SCustomListAdapter1(@NonNull Context context, @NonNull Activity activity, int resource) {
+        super(context, resource);
+        this.resource = resource;
+        this.context = context;
+        this.activity = activity;
+        settingsPreferences = context.getSharedPreferences(SETTINGS_PREF, 0);
+    }
+
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable final View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(this.resource, parent, false);
 
@@ -90,6 +102,22 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
                 }
             });
         }
+        if (position == 3) {
+            TextView title = (TextView) rowView.findViewById(R.id.title);
+            TextView desc = (TextView) rowView.findViewById(R.id.desc);
+            TextView value = (TextView) rowView.findViewById(R.id.value);
+
+            title.setText("Reset tutorials");
+            desc.setText("Resets all the tutorials");
+            value.setText("");
+
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    resetTutorials(v);
+                }
+            });
+        }
         return rowView;
     }
 
@@ -136,7 +164,7 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
     }
 
     public void setFont(final View v) {
-        final String fonts[] = new String[]{context.getString(R.string.default_font_name)};
+        final String fonts[] = new String[]{context.getString(R.string.default_font_name), "coolvetica_rg"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Pick a font");
         builder.setItems(fonts, new DialogInterface.OnClickListener() {
@@ -148,8 +176,35 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
                         Toast.LENGTH_LONG).show();
                 TextView tv = v.findViewById(R.id.value);
                 tv.setText(fonts[pos]);
+                activity.finish();
+                activity.startActivity(activity.getIntent());
             }
         });
         builder.show();
+    }
+
+    public void resetTutorials(final View v) {
+        android.support.v7.app.AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new android.support.v7.app.AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new android.support.v7.app.AlertDialog.Builder(context);
+        }
+        builder.setTitle("Reset tutorials")
+                .setMessage("Are you sure you want to reset all tutorials?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        context.getSharedPreferences(SYSTEM_PREF, 0).edit().putBoolean("show_tutorial_nav", true).apply();
+                        context.getSharedPreferences(SYSTEM_PREF, 0).edit().putBoolean("show_tutorial_home", true).apply();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
