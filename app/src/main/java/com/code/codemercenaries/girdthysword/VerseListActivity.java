@@ -1,14 +1,19 @@
 package com.code.codemercenaries.girdthysword;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -113,7 +118,17 @@ public class VerseListActivity extends AppCompatActivity {
 
                 BCustomListAdapter3 bCustomListAdapter3 = new BCustomListAdapter3(VerseListActivity.this, R.layout.bible_custom_list3, verses);
                 verseList.setAdapter(bCustomListAdapter3);
-
+                verseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String label = verses.get(position).get_book_name() + " " + verses.get(position).get_chap_num() + ":" + verses.get(position).get_verse_num();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText(label, verses.get(position).get_verse_text());
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(VerseListActivity.this, "Copied to clipboard",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
                 progressDialog.dismiss();
             }
 

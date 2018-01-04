@@ -197,6 +197,8 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
                         // continue with delete
                         context.getSharedPreferences(SYSTEM_PREF, 0).edit().putBoolean("show_tutorial_nav", true).apply();
                         context.getSharedPreferences(SYSTEM_PREF, 0).edit().putBoolean("show_tutorial_home", true).apply();
+                        Toast.makeText(context, "Reset all tutorials",
+                                Toast.LENGTH_LONG).show();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

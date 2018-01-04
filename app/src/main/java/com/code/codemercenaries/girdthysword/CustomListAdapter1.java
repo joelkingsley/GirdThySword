@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class CustomListAdapter1 extends ArrayAdapter<Chunk>{
             this.objects.add(objects.get(i));
             this.heading.add(objects.get(i).toString());
             this.subheading.add(objects.get(i).getBookName() + " " + objects.get(i).getChapNum() + ":" + dbHandler.retSection(objects.get(i).getSecId()).get_start_verse_num() + "-" + dbHandler.retSection(objects.get(i).getSecId()).get_end_verse_num());
+            Log.d("Subheading:", String.valueOf(objects.get(i).getSecId()));
         }
     }
 

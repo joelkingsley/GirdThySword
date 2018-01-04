@@ -400,6 +400,7 @@ public class DBHandler extends SQLiteAssetHelper {
 
     public void mergeChunksInSection(int secId){
         SQLiteDatabase db = getWritableDatabase();
+        Chunk chunk;
         db.delete(TABLE_CHUNK,C_KEY_SEC_ID + "=" + secId,null);
         Log.d("Function:","Deleted all chunks of " + secId);
 
@@ -411,10 +412,11 @@ public class DBHandler extends SQLiteAssetHelper {
         String selectQuery = "SELECT * FROM " + TABLE_SECTION + " WHERE " + S_KEY_SEC_ID + "=" + secId;
         Cursor cursor = db.rawQuery(selectQuery,null);
         if(cursor.moveToFirst()){
-            addChunk(new Chunk(0,cursor.getString(1),Integer.parseInt(cursor.getString(2)),
+            addChunk(chunk = new Chunk(0, cursor.getString(1), Integer.parseInt(cursor.getString(2)),
                     Integer.parseInt(cursor.getString(3)),Integer.parseInt(cursor.getString(4)),currDate,2,
                     secId,false));
             Log.d("Function:","Added Master Chunk");
+            Log.d("mergeSection:", chunk.toString());
         }
         db.close();
         Log.d("Function:","Add " + secId);
@@ -483,7 +485,7 @@ public class DBHandler extends SQLiteAssetHelper {
 
         db.insert(TABLE_CHUNK,null,values);
         db.close();
-        Log.d("Function:","Add Chunk");
+        Log.d("Function:", "Add Chunk " + chunk.getSecId() + ": " + chunk.toString());
 
     }
 

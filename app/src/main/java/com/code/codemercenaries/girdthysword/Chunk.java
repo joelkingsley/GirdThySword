@@ -28,7 +28,7 @@ public class Chunk {
         this._end_verse_num = _end_verse_num;
         this._next_date_of_review = _next_date_of_review;
         this._space = space;
-        this._sec_id = -1;
+        this._sec_id = _sec_id;
         this._mastered = _mastered;
     }
 
@@ -42,7 +42,7 @@ public class Chunk {
         this._end_verse_num = _end_verse_num;
         this._next_date_of_review = _next_date_of_review;
         this._space = _space;
-        this._sec_id = -1;
+        this._sec_id = _sec_id;
         this._mastered = _mastered;
     }
 

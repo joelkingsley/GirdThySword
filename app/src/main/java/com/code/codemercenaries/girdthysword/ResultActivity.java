@@ -3,6 +3,7 @@ package com.code.codemercenaries.girdthysword;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -73,6 +74,7 @@ public class ResultActivity extends AppCompatActivity {
                 Section s = db.retSection(chunk.getSecId());
                 Toast.makeText(ResultActivity.this, "Merged Section " + s.toString(),
                         Toast.LENGTH_LONG).show();
+
             }
 
         }
@@ -112,6 +114,12 @@ public class ResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.relative), "Back button disabled on this screen!", Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
