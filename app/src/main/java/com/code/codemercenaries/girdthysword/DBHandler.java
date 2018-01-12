@@ -580,7 +580,7 @@ public class DBHandler extends SQLiteAssetHelper {
             cv.put(C_KEY_MASTERED,c.isMastered());
         }
 
-        db.update(TABLE_CHUNK, cv, "id=" + c.getId(), null);
+        db.update(TABLE_CHUNK, cv, "id=" + '"' + c.getId() + '"', null);
     }
 
     public Chunk getNextChunk(String id) {
