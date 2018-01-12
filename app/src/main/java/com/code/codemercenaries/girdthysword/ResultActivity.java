@@ -26,9 +26,9 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final String SETTINGS_PREF = "settings_pref";
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setDefaultFontPath(getString(R.string.gnuolane_font))
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
@@ -42,7 +42,7 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
 
         DBHandler dbHandler = new DBHandler(this);
-        long id = getIntent().getLongExtra("EXTRA_CHUNK_ID",-1);
+        String id = getIntent().getStringExtra("EXTRA_CHUNK_ID");
         Chunk chunk = dbHandler.getChunk(id);
         float totalMatchScore = getIntent().getFloatExtra("EXTRA_TOTAL_MATCH_SCORE",0);
         int numOfReviews = getIntent().getIntExtra("EXTRA_NO_OF_REVIEWS",3);

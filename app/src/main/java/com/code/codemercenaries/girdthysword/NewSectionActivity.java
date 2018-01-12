@@ -20,7 +20,9 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,9 +69,9 @@ public class NewSectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setDefaultFontPath(getString(R.string.gnuolane_font))
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
@@ -351,21 +353,16 @@ public class NewSectionActivity extends AppCompatActivity {
 
         DBHandler dbHandler = new DBHandler(this);
 
-        if(dbHandler.getMaxSecId()==-1){
-            secId = 1;
-        }
-        else{
-            secId = dbHandler.getMaxSecId() + 1;
-        }
+        DatabaseReference sections = FirebaseDatabase.getInstance().getReference("sections").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        /*DatabaseReference sections = FirebaseDatabase.getInstance().getReference("sections").child(FirebaseAuth.getInstance().getCurrentUser().getUid());*/
+        String newSectionId = sections.push().getKey();
+        Section section = new Section(newSectionId, bookName, chapNum, startVerse, endVerse);
 
-        Section section = new Section(bookName,chapNum,startVerse,endVerse,secId);
+        sections.child(newSectionId).setValue(section);
+        Log.d("Section:", "Added");
+
         dbHandler.addSection(section);
-        /*String newSectionId = sections.push().getKey();
-        section.set_sec_id(newSectionId);
-        sections.child(newSectionId).setValue(section);*/
-        /*Log.d("Section:","Added");*/
+
 
         SharedPreferences systemPreferences = getSharedPreferences(SETTINGS_PREF, 0);
         chunkSize = systemPreferences.getInt("chunk_size",3);
@@ -379,13 +376,20 @@ public class NewSectionActivity extends AppCompatActivity {
 
         List<Chunk> chunkList = chunkize(section,chunkSize);
 
-        /*DatabaseReference chunks = FirebaseDatabase.getInstance().getReference("chunks").child(FirebaseAuth.getInstance().getCurrentUser().getUid());*/
+        DatabaseReference chunks = FirebaseDatabase.getInstance().getReference("chunks").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         for(int i=0;i<chunkList.size();i++){
             Log.d("Add Sub Chunk:","SID=" + chunkList.get(i).getSecId() + " " + chunkList.get(i).toString() + " " + chunkList.get(i).getNextDateOfReview());
+
+            String newChunkId = chunks.push().getKey();
+            //chunkList.get(i).setId(newChunkId);
+            Chunk newChunk = chunkList.get(i);
+            newChunk.setId(newChunkId);
+            chunkList.set(i, newChunk);
+
             dbHandler.addChunk(chunkList.get(i));
-            /*String newChunkId = chunks.push().getKey();
-            chunks.child(newChunkId).setValue(chunkList.get(i));*/
+
+            chunks.child(newChunkId).setValue(chunkList.get(i));
         }
         Log.d("Chunks:", "Added");
 
@@ -492,7 +496,7 @@ public class NewSectionActivity extends AppCompatActivity {
             }
         });*/
 
-        Toast.makeText(NewSectionActivity.this, "Added " + section.toString() + ":" + secId,
+        Toast.makeText(NewSectionActivity.this, "Added " + section.toString() + ":" + newSectionId,
                 Toast.LENGTH_LONG).show();
         Intent intent = new Intent(NewSectionActivity.this,HomeActivity.class);
         startActivity(intent);

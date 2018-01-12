@@ -72,6 +72,7 @@ public class HomeActivity extends AppCompatActivity
     FirebaseAuth mAuth;
     DrawerLayout drawerLayout;
 
+
     String theme;
 
     List<Chunk> allChunks;
@@ -83,9 +84,9 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setDefaultFontPath(getString(R.string.gnuolane_font))
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
@@ -267,7 +268,8 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(HomeActivity.this,ReviewActivity.class);
-                intent.putExtra("EXTRA_CHUNK_ID", todayChunks.get(i).getId());
+                String chunkId = todayChunks.get(i).getId();
+                intent.putExtra("EXTRA_CHUNK_ID", chunkId);
                 startActivity(intent);
             }
         });
@@ -419,7 +421,6 @@ public class HomeActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
-
         return true;
     }
 
@@ -523,8 +524,8 @@ public class HomeActivity extends AppCompatActivity
             public void onGlobalLayout() {
                 drawerLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                final Tutorial tutorial1 = new Tutorial(HomeActivity.this, new Point(100, 770), 200f, "Home", "The Home screen is the default screen through which you can add, delete or review sections that you want to memorize");
-                final Tutorial tutorial2 = new Tutorial(HomeActivity.this, new Point(100, 970), 200f, "Bible", "This is the integrated Bible which also contains information on the verses you've memorized");
+                final Tutorial tutorial1 = new Tutorial(HomeActivity.this, new Point(100, 770), 1f, "Home", "The Home screen is the default screen through which you can add, delete or review sections that you want to memorize");
+                final Tutorial tutorial2 = new Tutorial(HomeActivity.this, new Point(100, 970), 1f, "Bible", "This is the integrated Bible which also contains information on the verses you've memorized");
 
                 final SimpleTarget target1 = tutorial1.generateTarget();
                 final SimpleTarget target2 = tutorial2.generateTarget();

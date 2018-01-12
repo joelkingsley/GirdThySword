@@ -54,8 +54,13 @@
     <string name="default_settings_list_desc">Number of verses in each chunk</string>
     <string name="default_chunk_size">3</string>
     <string name="default_settings_list_title">Chunk Size</string>
-    <string name="default_font">fonts/gnuolane_rg.ttf</string>
-    <string name="default_font_name">gnuolane_rg</string>
+
+    <string name="default_font">fonts/coolvetica_rg.ttf</string>
+    <string name="default_font_name">coolvetica_rg</string>
+
+    <string name="gnuolane_font">fonts/gnuolane_rg.ttf</string>
+    <string name="gnuolane_font_name">gnuolane_rg</string>
+
     <string name="coolvetica_font_name">coolvetica_rg</string>
     <string name="coolvetica_font">fonts/coolvetica_rg.ttf</string>
 

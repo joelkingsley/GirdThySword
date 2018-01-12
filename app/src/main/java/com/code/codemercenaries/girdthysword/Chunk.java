@@ -5,9 +5,9 @@ package com.code.codemercenaries.girdthysword;
  */
 
 public class Chunk {
-    long _id;
+    String _id;
     int _seq;
-    int _sec_id;
+    String _sec_id;
     String _book_name;
     int _chapter_num;
     int _start_verse_num;
@@ -17,10 +17,10 @@ public class Chunk {
     boolean _mastered;
 
 
-    public Chunk(long _id, int _seq, String _book_name, int _chapter_num,
+    public Chunk(String _id, int _seq, String _book_name, int _chapter_num,
                  int _start_verse_num, int _end_verse_num,
-                 String _next_date_of_review, int space, int _sec_id, boolean _mastered) {
-        this._id = -1;
+                 String _next_date_of_review, int space, String _sec_id, boolean _mastered) {
+        this._id = _id;
         this._seq = _seq;
         this._book_name = _book_name;
         this._chapter_num = _chapter_num;
@@ -34,7 +34,7 @@ public class Chunk {
 
     public Chunk(int _seq, String _book_name, int _chapter_num,
                  int _start_verse_num, int _end_verse_num,
-                 String _next_date_of_review, int _space, int _sec_id, boolean _mastered) {
+                 String _next_date_of_review, int _space, String _sec_id, boolean _mastered) {
         this._seq = _seq;
         this._book_name = _book_name;
         this._chapter_num = _chapter_num;
@@ -47,7 +47,7 @@ public class Chunk {
     }
 
     public Chunk() {
-        this._id = -1;
+        this._id = "NA";
         this._seq = 0;
         this._book_name = "";
         this._chapter_num = 0;
@@ -55,23 +55,23 @@ public class Chunk {
         this._end_verse_num = 0;
         this._next_date_of_review = "";
         this._space = 0;
-        this._sec_id = -1;
+        this._sec_id = "NA";
         this._mastered = false;
     }
 
-    public long getId() {
+    public String getId() {
         return _id;
     }
 
-    public void setId(long _id) {
+    public void setId(String _id) {
         this._id = _id;
     }
 
-    public int getSecId() {
+    public String getSecId() {
         return _sec_id;
     }
 
-    public void setSecId(int _sec_id) {
+    public void setSecId(String _sec_id) {
         this._sec_id = _sec_id;
     }
 

@@ -92,7 +92,7 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
             title.setText("Font");
             desc.setText("Typeface of the app");
 
-            String font = settingsPreferences.getString("font", context.getString(R.string.default_font_name));
+            String font = settingsPreferences.getString("font", context.getString(R.string.gnuolane_font_name));
             fontValue.setText(font);
 
             rowView.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +164,7 @@ public class SCustomListAdapter1 extends ArrayAdapter<String> {
     }
 
     public void setFont(final View v) {
-        final String fonts[] = new String[]{context.getString(R.string.default_font_name), "coolvetica_rg"};
+        final String fonts[] = new String[]{context.getString(R.string.gnuolane_font_name), "coolvetica_rg"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Pick a font");
         builder.setItems(fonts, new DialogInterface.OnClickListener() {

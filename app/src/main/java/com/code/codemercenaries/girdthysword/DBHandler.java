@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class DBHandler extends SQLiteAssetHelper {
-    public static final String B_KEY_ID = "id";
+
     public static final String B_KEY_BOOK_NAME = "book_name";
     public static final String B_KEY_CHAP_NUM = "chapter_num";
     public static final String B_KEY_VERSE_NUM = "verse_num";
@@ -39,9 +39,8 @@ public class DBHandler extends SQLiteAssetHelper {
     public static final String S_KEY_CHAP_NUM = "chapter_num";
     public static final String S_KEY_START_VERSE_NUM = "start_verse_num";
     public static final String S_KEY_END_VERSE_NUM = "end_verse_num";
-    public static final String S_KEY_SEC_ID = "sec_id";
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "main.db";
+    private static final String DATABASE_NAME = "girdthysword.db";
+    private static final int DATABASE_VERSION = 2;
     private static final String TABLE_BIBLE = "bible";
     private static final String TABLE_CHUNK = "chunk";
     private static final String TABLE_SECTION = "section";
@@ -326,17 +325,17 @@ public class DBHandler extends SQLiteAssetHelper {
         values.put(S_KEY_CHAP_NUM,section.get_chap_num());
         values.put(S_KEY_START_VERSE_NUM,section.get_start_verse_num());
         values.put(S_KEY_END_VERSE_NUM,section.get_end_verse_num());
-        values.put(S_KEY_SEC_ID,section.get_sec_id());
+        values.put(S_KEY_ID, section.get_sec_id());
 
         db.insert(TABLE_SECTION,null,values);
         db.close();
         Log.d("Function:","Add Section " + section.toString());
     }
 
-    public void deleteSection(long secId){
+    public void deleteSection(String secId) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_SECTION,S_KEY_SEC_ID + "=" + secId,null);
-        db.delete(TABLE_CHUNK,C_KEY_SEC_ID + "=" + secId,null);
+        db.delete(TABLE_SECTION, S_KEY_ID + "=" + "'" + secId + "'", null);
+        db.delete(TABLE_CHUNK, C_KEY_SEC_ID + "=" + "'" + secId + "'", null);
         Log.d("Function:","Deleted " + secId);
     }
 
@@ -361,20 +360,19 @@ public class DBHandler extends SQLiteAssetHelper {
         return maxSecId;
     }
 
-    public Section retSection(int secId){
+    public Section retSection(String secId) {
         Section s = new Section();
-        String selectQuery = "SELECT * FROM " + TABLE_SECTION + " WHERE " + S_KEY_SEC_ID + "=" + secId;
+        String selectQuery = "SELECT * FROM " + TABLE_SECTION + " WHERE " + S_KEY_ID + "=" + "'" + secId + "'";
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if(cursor.moveToFirst()){
             do{
-                s.set_id(Long.parseLong(cursor.getString(0)));
+                s.set_sec_id(secId);
                 s.set_book_name(cursor.getString(1));
                 s.set_chap_num(Integer.parseInt(cursor.getString(2)));
                 s.set_start_verse_num(Integer.parseInt(cursor.getString(3)));
                 s.set_end_verse_num(Integer.parseInt(cursor.getString(4)));
-                s.set_sec_id(secId);
                 Log.d("Ret Section:", s.toString());
             }while(cursor.moveToNext());
         }
@@ -382,15 +380,15 @@ public class DBHandler extends SQLiteAssetHelper {
         return s;
     }
 
-    public List<Integer> retSectionIds(){
-        List<Integer> sections = new ArrayList<Integer>();
+    public List<String> retSectionIds() {
+        List<String> sections = new ArrayList<String>();
 
         SQLiteDatabase db = getWritableDatabase();
         String selectQuery = "SELECT DISTINCT " + C_KEY_SEC_ID + " FROM " + TABLE_CHUNK;
         Cursor cursor = db.rawQuery(selectQuery, null);
         if(cursor.moveToFirst()){
             do{
-                Integer id = Integer.parseInt(cursor.getString(0));
+                String id = (cursor.getString(0));
                 sections.add(id);
                 Log.d("Ret SecID:", id.toString());
             }while(cursor.moveToNext());
@@ -398,10 +396,10 @@ public class DBHandler extends SQLiteAssetHelper {
         return sections;
     }
 
-    public void mergeChunksInSection(int secId){
+    public void mergeChunksInSection(String secId) {
         SQLiteDatabase db = getWritableDatabase();
         Chunk chunk;
-        db.delete(TABLE_CHUNK,C_KEY_SEC_ID + "=" + secId,null);
+        db.delete(TABLE_CHUNK, C_KEY_SEC_ID + "=" + "'" + secId + "'", null);
         Log.d("Function:","Deleted all chunks of " + secId);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -409,7 +407,7 @@ public class DBHandler extends SQLiteAssetHelper {
         ca.add(Calendar.DATE,2);
         String currDate = df.format(ca.getTime());
 
-        String selectQuery = "SELECT * FROM " + TABLE_SECTION + " WHERE " + S_KEY_SEC_ID + "=" + secId;
+        String selectQuery = "SELECT * FROM " + TABLE_SECTION + " WHERE " + S_KEY_ID + "=" + "'" + secId + "'";
         Cursor cursor = db.rawQuery(selectQuery,null);
         if(cursor.moveToFirst()){
             addChunk(chunk = new Chunk(0, cursor.getString(1), Integer.parseInt(cursor.getString(2)),
@@ -422,10 +420,10 @@ public class DBHandler extends SQLiteAssetHelper {
         Log.d("Function:","Add " + secId);
     }
 
-    public boolean checkIfMasteredSection(int secId){
+    public boolean checkIfMasteredSection(String secId) {
         boolean isMastered;
         SQLiteDatabase db = getWritableDatabase();
-        String selectQuery = "SELECT " + C_KEY_MASTERED + " FROM " + TABLE_CHUNK + " WHERE " + C_KEY_SEC_ID + "=" + secId;
+        String selectQuery = "SELECT " + C_KEY_MASTERED + " FROM " + TABLE_CHUNK + " WHERE " + C_KEY_SEC_ID + "=" + "'" + secId + "'";
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         if(cursor.moveToFirst()){
@@ -445,12 +443,12 @@ public class DBHandler extends SQLiteAssetHelper {
         List<Chunk> chunks = new ArrayList<Chunk>();
 
         SQLiteDatabase db = getWritableDatabase();
-        String selectQuery = "SELECT * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_SEC_ID + "=" + sec_id;
+        String selectQuery = "SELECT * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_SEC_ID + "=" + "'" + sec_id + "'";
         Cursor cursor = db.rawQuery(selectQuery,null);
         if(cursor.moveToFirst()){
             do{
                 Chunk chunk = new Chunk();
-                chunk.setId(Long.parseLong(cursor.getString(0)));
+                chunk.setId((cursor.getString(0)));
                 chunk.setSeq(Integer.parseInt(cursor.getString(1)));
                 chunk.setBookName(cursor.getString(2));
                 chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
@@ -458,7 +456,7 @@ public class DBHandler extends SQLiteAssetHelper {
                 chunk.setEndVerseNum(Integer.parseInt(cursor.getString(5)));
                 chunk.setNextDateOfReview(cursor.getString(6));
                 chunk.setSpace(Integer.parseInt(cursor.getString(7)));
-                chunk.setSecId(Integer.parseInt(cursor.getString(8)));
+                chunk.setSecId((cursor.getString(8)));
                 chunk.setMastered(Boolean.parseBoolean(cursor.getString(9)));
 
                 chunks.add(chunk);
@@ -473,6 +471,7 @@ public class DBHandler extends SQLiteAssetHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
+        values.put(C_KEY_ID, chunk.getId());
         values.put(C_KEY_SEQ,chunk.getSeq());
         values.put(C_KEY_BOOK_NAME,chunk.getBookName());
         values.put(C_KEY_CHAP_NUM,chunk.getChapNum());
@@ -501,7 +500,7 @@ public class DBHandler extends SQLiteAssetHelper {
         if (cursor.moveToFirst()) {
             do {
                 Chunk chunk = new Chunk();
-                chunk.setId(Long.parseLong(cursor.getString(0)));
+                chunk.setId((cursor.getString(0)));
                 chunk.setSeq(Integer.parseInt(cursor.getString(1)));
                 chunk.setBookName(cursor.getString(2));
                 chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
@@ -509,7 +508,7 @@ public class DBHandler extends SQLiteAssetHelper {
                 chunk.setEndVerseNum(Integer.parseInt(cursor.getString(5)));
                 chunk.setNextDateOfReview(cursor.getString(6));
                 chunk.setSpace(Integer.parseInt(cursor.getString(7)));
-                chunk.setSecId(Integer.parseInt(cursor.getString(8)));
+                chunk.setSecId((cursor.getString(8)));
                 chunk.setMastered(Boolean.parseBoolean(cursor.getString(9)));
 
                 // Adding contact to list
@@ -521,13 +520,13 @@ public class DBHandler extends SQLiteAssetHelper {
         return chunkList;
     }
 
-    public Chunk getChunk(long id){
+    public Chunk getChunk(String id) {
         Chunk chunk = new Chunk();
-        String selectQuery = "SELECT * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_ID + " = " + id + ";";
+        String selectQuery = "SELECT * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_ID + " = " + "'" + id + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
-            chunk.setId(Long.parseLong(cursor.getString(0)));
+            chunk.setId((cursor.getString(0)));
             chunk.setSeq(Integer.parseInt(cursor.getString(1)));
             chunk.setBookName(cursor.getString(2));
             chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
@@ -535,7 +534,7 @@ public class DBHandler extends SQLiteAssetHelper {
             chunk.setEndVerseNum(Integer.parseInt(cursor.getString(5)));
             chunk.setNextDateOfReview(cursor.getString(6));
             chunk.setSpace(Integer.parseInt(cursor.getString(7)));
-            chunk.setSecId(Integer.parseInt(cursor.getString(8)));
+            chunk.setSecId((cursor.getString(8)));
             chunk.setMastered(Boolean.parseBoolean(cursor.getString(9)));
         }
 
@@ -584,13 +583,13 @@ public class DBHandler extends SQLiteAssetHelper {
         db.update(TABLE_CHUNK, cv, "id=" + c.getId(), null);
     }
 
-    public Chunk getNextChunk(long id){
+    public Chunk getNextChunk(String id) {
         Chunk chunk = new Chunk();
-        String selectQuery = "SELECT * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_ID + " = " + id + ";";
+        String selectQuery = "SELECT * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_ID + " = " + "'" + id + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
-            chunk.setId(Long.parseLong(cursor.getString(0)));
+            chunk.setId((cursor.getString(0)));
             chunk.setSeq(Integer.parseInt(cursor.getString(1)));
             chunk.setBookName(cursor.getString(2));
             chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
@@ -598,7 +597,7 @@ public class DBHandler extends SQLiteAssetHelper {
             chunk.setEndVerseNum(Integer.parseInt(cursor.getString(5)));
             chunk.setNextDateOfReview(cursor.getString(6));
             chunk.setSpace(Integer.parseInt(cursor.getString(7)));
-            chunk.setSecId(Integer.parseInt(cursor.getString(8)));
+            chunk.setSecId((cursor.getString(8)));
             chunk.setMastered(Boolean.parseBoolean(cursor.getString(9)));
         }
 
@@ -610,7 +609,7 @@ public class DBHandler extends SQLiteAssetHelper {
     public void updateSiblingChunks(Chunk c){
         int seq = c.getSeq() + 1;
         String selectQuery = "SELECT " + C_KEY_ID + "," + C_KEY_NEXT_DATE_OF_REVIEW + " FROM " + TABLE_CHUNK + " WHERE "
-                + C_KEY_SEC_ID + "=" + c.getSecId() + " AND " + C_KEY_SEQ + "=" + seq;
+                + C_KEY_SEC_ID + "=" + "'" + c.getSecId() + "'" + " AND " + C_KEY_SEQ + "=" + seq;
         Log.d("Select:",selectQuery);
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
@@ -624,7 +623,7 @@ public class DBHandler extends SQLiteAssetHelper {
             if(cursor.getString(1).equals("NA")){
                 cv.put(C_KEY_NEXT_DATE_OF_REVIEW,initDOR);
                 cv.put(C_KEY_SPACE,1);
-                db.update(TABLE_CHUNK,cv,"id="+Long.parseLong(cursor.getString(0)),null);
+                db.update(TABLE_CHUNK, cv, "id=" + "'" + (cursor.getString(0)) + "'", null);
                 Log.d("Update:","Updated " + cursor.getString(0) + " to " + initDOR);
             }
         }
@@ -634,7 +633,7 @@ public class DBHandler extends SQLiteAssetHelper {
     public boolean checkIfMasteredChunk(long id){
         boolean isMastered;
         SQLiteDatabase db = getWritableDatabase();
-        String selectQuery = "SELECT " + C_KEY_MASTERED + " FROM " + TABLE_CHUNK + " WHERE " + C_KEY_ID + "=" + id;
+        String selectQuery = "SELECT " + C_KEY_MASTERED + " FROM " + TABLE_CHUNK + " WHERE " + C_KEY_ID + "=" + "'" + id + "'";
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         if(cursor.moveToFirst()){

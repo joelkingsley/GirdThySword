@@ -26,7 +26,7 @@ public class ReviewActivity extends AppCompatActivity {
     private final int REQ_CODE_SPEECH_INPUT = 100;
     //General
     Chunk chunk;
-    Long id;
+    String id;
     int count=0;
     List<ReadableVerse> readableVerseList = new ArrayList<ReadableVerse>();
     List<StringTokenizer> tokenList = new ArrayList<StringTokenizer>();
@@ -47,9 +47,9 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final String SETTINGS_PREF = "settings_pref";
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.default_font_name))) {
+        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
             CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.default_font))
+                    .setDefaultFontPath(getString(R.string.gnuolane_font))
                     .setFontAttrId(R.attr.fontPath)
                     .build()
             );
@@ -73,7 +73,7 @@ public class ReviewActivity extends AppCompatActivity {
 
 
         DBHandler dbHandler = new DBHandler(this);
-        id = getIntent().getLongExtra("EXTRA_CHUNK_ID",-1);
+        id = getIntent().getStringExtra("EXTRA_CHUNK_ID");
         chunk = dbHandler.getChunk(id);
         initialSpace = chunk.getSpace();
 

@@ -6,19 +6,18 @@ package com.code.codemercenaries.girdthysword;
 
 public class Section {
 
-    long _id;
     String _book_name;
     int _chap_num;
     int _start_verse_num;
     int _end_verse_num;
-    int _sec_id;
+    String _id;
 
-    public Section(String _book_name, int _chap_num, int _start_verse_num, int _end_verse_num, int _sec_id) {
+    public Section(String _sec_id, String _book_name, int _chap_num, int _start_verse_num, int _end_verse_num) {
         this._book_name = _book_name;
         this._chap_num = _chap_num;
         this._start_verse_num = _start_verse_num;
         this._end_verse_num = _end_verse_num;
-        this._sec_id = _sec_id;
+        this._id = _sec_id;
     }
 
     public Section() {
@@ -26,7 +25,7 @@ public class Section {
         this._chap_num = -123;
         this._start_verse_num = -1;
         this._end_verse_num = -1;
-        this._sec_id = -1;
+        this._id = "NA";
     }
 
     public Section(String _book_name, int _chap_num, int _start_verse_num, int _end_verse_num) {
@@ -34,15 +33,7 @@ public class Section {
         this._chap_num = _chap_num;
         this._start_verse_num = _start_verse_num;
         this._end_verse_num = _end_verse_num;
-        this._sec_id = -1;
-    }
-
-    public long get_id() {
-        return _id;
-    }
-
-    public void set_id(long _id) {
-        this._id = _id;
+        this._id = "NA";
     }
 
     public String get_book_name() {
@@ -78,12 +69,12 @@ public class Section {
     }
 
 
-    public int get_sec_id() {
-        return _sec_id;
+    public String get_sec_id() {
+        return _id;
     }
 
-    public void set_sec_id(int _sec_id) {
-        this._sec_id = _sec_id;
+    public void set_sec_id(String _sec_id) {
+        this._id = _sec_id;
     }
 
     @Override
