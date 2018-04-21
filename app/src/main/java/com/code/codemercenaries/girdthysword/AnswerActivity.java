@@ -68,9 +68,9 @@ public class AnswerActivity extends AppCompatActivity
 
             "GirdThySword uses Google's speech API for speech recognition which is not very accurate " +
                     "with archaic words that are in the Bible. That being said there are some tips " +
-                    "that you can use inorder to get the best possible accuracy.\n1.Review when " +
+                    "that you can use inorder to get the best possible accuracy.\n\n1. Review when " +
                     "connected to fast Internet such as WiFi or 4G data. This makes the speech engine " +
-                    "to send the recording to the cloud for more rigorous processing.\n2.Recite the " +
+                    "to send the recording to the cloud for more rigorous processing.\n2. Recite the " +
                     "verses in a consistent and slow pace, with your own voice. The speech recognition " +
                     "is trained to your voice when you use voice typing or the Google Assistant in your Phone. " +
                     "Therefore it will understand your voice much easier than it understands someone " +
