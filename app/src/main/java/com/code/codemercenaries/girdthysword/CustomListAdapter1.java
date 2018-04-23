@@ -71,7 +71,11 @@ public class CustomListAdapter1 extends ArrayAdapter<Chunk>{
             imageView.setImageBitmap(bitmap);
             heading.setText(this.heading.get(position));
             subheading.setText(this.subheading.get(position));
-            date.setText(this.objects.get(position).getNextDateOfReview());
+            String auxDate = this.objects.get(position).getNextDateOfReview();
+            if (auxDate.equals("NA")) {
+                auxDate = "Not Scheduled";
+            }
+            date.setText(auxDate);
         }
 
         return rowView;

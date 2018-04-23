@@ -8,7 +8,21 @@
     tools:context="com.code.codemercenaries.girdthysword.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-    <TabHost
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tabLayout">
+
+    </android.support.v4.view.ViewPager>
+    <!--<TabHost
         android:id="@+id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -99,4 +113,5 @@
             </FrameLayout>
         </RelativeLayout>
     </TabHost>
+    -->
 </RelativeLayout>

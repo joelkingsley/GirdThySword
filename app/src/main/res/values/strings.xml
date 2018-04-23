@@ -103,4 +103,8 @@
     <string name="karthikeyan_details">Karthikeyan\n<a href="http://karthikeyan210.wordpress.com">http://karthikeyan210.wordpress.com</a></string>
     <string name="murali_krishna_details">Murali Krishna</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab1">OVERDUE</string>
+
 </resources>

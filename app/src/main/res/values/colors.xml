@@ -12,4 +12,7 @@
     <color name="colorSword">#16cde6</color>
     <color name="colorHandle">#353744</color>
     <color name="backHighlighter">#63d297</color>
+    <color name="orange">#FF6F00</color>
+    <color name="red">#D50000</color>
+    <color name="grey">#616161</color>
 </resources>

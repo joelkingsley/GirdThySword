@@ -11,12 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="20dp"
+        android:layout_gravity="center_vertical"
         android:layout_marginRight="40dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
+        android:scaleX="1"
+        android:scaleY="1"
         app:srcCompat="@mipmap/ic_launcher" />
 
     <LinearLayout
@@ -50,13 +49,30 @@
             android:text="@string/genesis_1_1_10"
             android:textAlignment="viewStart" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical">
+
         <TextView
             android:id="@+id/date"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/subheading"
-            android:layout_marginStart="33dp"
-            android:text="21/12/2012"
-            android:textAlignment="viewStart" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:text="21/12/2012" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KJV" />
     </LinearLayout>
 </LinearLayout>

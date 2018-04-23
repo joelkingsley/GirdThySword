@@ -24,6 +24,7 @@ public class DBHandler extends SQLiteAssetHelper {
     public static final String B_KEY_VERSE_NUM = "verse_num";
     public static final String B_KEY_VERSE_TEXT = "verse_text";
     public static final String B_KEY_MEMORY = "memory";
+
     public static final String C_KEY_ID = "id";
     public static final String C_KEY_SEQ = "seq";
     public static final String C_KEY_BOOK_NAME = "book_name";
@@ -34,13 +35,16 @@ public class DBHandler extends SQLiteAssetHelper {
     public static final String C_KEY_SPACE = "space";
     public static final String C_KEY_SEC_ID = "sec_id";
     public static final String C_KEY_MASTERED = "mastered";
+
     public static final String S_KEY_ID = "id";
     public static final String S_KEY_BOOK_NAME = "book_name";
     public static final String S_KEY_CHAP_NUM = "chapter_num";
     public static final String S_KEY_START_VERSE_NUM = "start_verse_num";
     public static final String S_KEY_END_VERSE_NUM = "end_verse_num";
+
     private static final String DATABASE_NAME = "girdthysword.db";
     private static final int DATABASE_VERSION = 2;
+
     private static final String TABLE_BIBLE = "bible";
     private static final String TABLE_CHUNK = "chunk";
     private static final String TABLE_SECTION = "section";
@@ -520,6 +524,70 @@ public class DBHandler extends SQLiteAssetHelper {
         return chunkList;
     }
 
+    public List<Chunk> getAllChunksForToday(String currDate) {
+        List<Chunk> chunkList = new ArrayList<Chunk>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_NEXT_DATE_OF_REVIEW + " LIKE " + "'" + currDate + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Chunk chunk = new Chunk();
+                chunk.setId((cursor.getString(0)));
+                chunk.setSeq(Integer.parseInt(cursor.getString(1)));
+                chunk.setBookName(cursor.getString(2));
+                chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
+                chunk.setStartVerseNum(Integer.parseInt(cursor.getString(4)));
+                chunk.setEndVerseNum(Integer.parseInt(cursor.getString(5)));
+                chunk.setNextDateOfReview(cursor.getString(6));
+                chunk.setSpace(Integer.parseInt(cursor.getString(7)));
+                chunk.setSecId((cursor.getString(8)));
+                chunk.setMastered(Boolean.parseBoolean(cursor.getString(9)));
+
+                // Adding contact to list
+                chunkList.add(chunk);
+            } while (cursor.moveToNext());
+        }
+        Log.d("Function:", "Get All Chunks");
+        // return contact list
+        return chunkList;
+    }
+
+    public List<Chunk> getAllChunksThatAreOverdue(String currDate) {
+        List<Chunk> chunkList = new ArrayList<Chunk>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_NEXT_DATE_OF_REVIEW + " < " + "date(" + "'" + currDate + "'" + ")";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Chunk chunk = new Chunk();
+                chunk.setId((cursor.getString(0)));
+                chunk.setSeq(Integer.parseInt(cursor.getString(1)));
+                chunk.setBookName(cursor.getString(2));
+                chunk.setChapNum(Integer.parseInt(cursor.getString(3)));
+                chunk.setStartVerseNum(Integer.parseInt(cursor.getString(4)));
+                chunk.setEndVerseNum(Integer.parseInt(cursor.getString(5)));
+                chunk.setNextDateOfReview(cursor.getString(6));
+                chunk.setSpace(Integer.parseInt(cursor.getString(7)));
+                chunk.setSecId((cursor.getString(8)));
+                chunk.setMastered(Boolean.parseBoolean(cursor.getString(9)));
+
+                // Adding contact to list
+                chunkList.add(chunk);
+            } while (cursor.moveToNext());
+        }
+        Log.d("Function:", "Get All Chunks");
+        // return contact list
+        return chunkList;
+    }
+
     public Chunk getChunk(String id) {
         Chunk chunk = new Chunk();
         String selectQuery = "SELECT * FROM " + TABLE_CHUNK + " WHERE " + C_KEY_ID + " = " + "'" + id + "'";
@@ -645,6 +713,4 @@ public class DBHandler extends SQLiteAssetHelper {
         }
         return true;
     }
-
-
 }

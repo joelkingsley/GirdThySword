@@ -11,24 +11,23 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -42,7 +41,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -65,13 +63,19 @@ public class HomeActivity extends AppCompatActivity
     TextView tv_add;
     TextView tv_delete;
     boolean fab_status;
-    RelativeLayout layTab;
+    //RelativeLayout layTab;
     LinearLayout back;
     Toolbar toolbar;
     SharedPreferences settingsPreferences;
     FirebaseAuth mAuth;
     DrawerLayout drawerLayout;
 
+    ViewPager viewPager;
+    TabLayout tabLayout;
+
+    TodayFragment todayFragment;
+    OverdueFragment overDueFragment;
+    AllFragment allFragment;
 
     String theme;
 
@@ -80,6 +84,8 @@ public class HomeActivity extends AppCompatActivity
     List<Chunk> overdueChunks;
     List<Chunk> tomorrowChunks;
 
+    String tabTitle[] = {"OVERDUE", "TODAY", "ALL"};
+    ArrayList<Integer> remainingCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,15 +109,15 @@ public class HomeActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         back = (LinearLayout) findViewById(R.id.back);
-        layTab = (RelativeLayout) findViewById(R.id.layTab);
+        /*layTab = (RelativeLayout) findViewById(R.id.layTab);*/
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        /*
         tabHost = (TabHost) findViewById(R.id.tabhost); // initiate TabHost
         today = (ListView) findViewById(R.id.today_list);
         overdue = (ListView) findViewById(R.id.overdue_list);
         tomorrow = (ListView) findViewById(R.id.tomorrow_list);
-        all = (ListView) findViewById(R.id.all_list);
+        all = (ListView) findViewById(R.id.all_list);*/
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab_add = (FloatingActionButton) findViewById(R.id.fab_add);
@@ -136,11 +142,22 @@ public class HomeActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        setupTabHost();
+        //setupTabHost();
         if (getSharedPreferences(SYSTEM_PREF, 0).getBoolean("show_tutorial_nav", true)) {
             startTutorialNav();
         }
 
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        todayFragment = new TodayFragment();
+        overDueFragment = new OverdueFragment();
+        allFragment = new AllFragment();
+        adapter.addFragment(overDueFragment, "OVERDUE");
+        adapter.addFragment(todayFragment, "TODAY");
+        adapter.addFragment(allFragment, "ALL");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -153,6 +170,24 @@ public class HomeActivity extends AppCompatActivity
         super.onResume();
 
         mAuth = FirebaseAuth.getInstance();
+
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setOffscreenPageLimit(3);
+        setupViewPager(viewPager);
+        tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar ca = Calendar.getInstance();
+        String currDate = df.format(ca.getTime());
+
+        DBHandler dbHandler = new DBHandler(this);
+        remainingCount = new ArrayList<>();
+        remainingCount.add(dbHandler.getAllChunksThatAreOverdue(currDate).size());
+        remainingCount.add(dbHandler.getAllChunksForToday(currDate).size());
+        remainingCount.add(0);
+
+        setupTabIcons();
 
         try {
             setupColors();
@@ -178,15 +213,15 @@ public class HomeActivity extends AppCompatActivity
         if (theme.equals("original")) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             back.setBackgroundColor(getResources().getColor(R.color.colorSword));
-            layTab.setBackgroundColor(getResources().getColor(R.color.colorSword));
+            //layTab.setBackgroundColor(getResources().getColor(R.color.colorSword));
         } else if (theme.equals("dark")) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorSword));
-            back.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            layTab.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            //back.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            //layTab.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         } else if (theme.equals("white")) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             back.setBackgroundColor(getResources().getColor(android.R.color.white));
-            layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
+            //layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
         }
     }
 
@@ -228,7 +263,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });*/
 
-        allChunks = dbHandler.getAllChunks();
+        /*allChunks = dbHandler.getAllChunks();
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Calendar ca = Calendar.getInstance();
@@ -289,7 +324,31 @@ public class HomeActivity extends AppCompatActivity
         tomorrow.setAdapter(tomorrowAdapter);
 
         CustomListAdapter1 allAdapter = new CustomListAdapter1(this,R.layout.chunk_custom_list2,allChunks);
-        all.setAdapter(allAdapter);
+        all.setAdapter(allAdapter);*/
+
+    }
+
+    private View prepareTabView(int pos) {
+        View view = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
+        TextView tv_count = (TextView) view.findViewById(R.id.tv_count);
+        tv_title.setText(tabTitle[pos]);
+        if (remainingCount.get(pos) > 0) {
+            tv_count.setVisibility(View.VISIBLE);
+            tv_count.setText("" + remainingCount.get(pos));
+        } else
+            tv_count.setVisibility(View.GONE);
+
+
+        return view;
+    }
+
+    private void setupTabIcons() {
+
+        for (int i = 0; i < tabTitle.length; i++) {
+            tabLayout.getTabAt(i).setCustomView(prepareTabView(i));
+        }
+
 
     }
 
@@ -350,7 +409,7 @@ public class HomeActivity extends AppCompatActivity
         tv_delete.setVisibility(View.INVISIBLE);
     }
 
-    private void setupTabHost() {
+    /*private void setupTabHost() {
 
         TabHost.TabSpec spec; // Reusable TabSpec for each tab
         tabHost.setup();
@@ -402,7 +461,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         });
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

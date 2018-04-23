@@ -8,9 +8,7 @@
     tools:context="com.code.codemercenaries.girdthysword.AboutActivity"
     tools:showIn="@layout/app_bar_about">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -139,7 +137,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="Version 1.1.1 (Beta)"
+            android:text="Version 2.0: Exodus (Beta)"
             android:textAlignment="center"
             android:textSize="15sp" />
 
