@@ -3,8 +3,6 @@ package com.code.codemercenaries.girdthysword;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -20,6 +18,11 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.code.codemercenaries.girdthysword.Database.DBHandler;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+import com.code.codemercenaries.girdthysword.Objects.Chunk;
+import com.code.codemercenaries.girdthysword.Objects.Section;
+import com.code.codemercenaries.girdthysword.Objects.Version;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,7 +33,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NewSectionActivity extends AppCompatActivity {
@@ -39,6 +41,7 @@ public class NewSectionActivity extends AppCompatActivity {
     final String SETTINGS_PREF = "settings_pref";
     SharedPreferences indexPreferences;
     SharedPreferences settingsPreferences;
+    String version;
     int chunkSize = 3;
     int numOfVerse;
     Button submit;
@@ -48,40 +51,21 @@ public class NewSectionActivity extends AppCompatActivity {
     boolean addedBible;
     DatabaseReference databaseReference;
 
-    List<String> bookItems = new ArrayList<>(Arrays.asList("Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua",
-            "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles",
-            "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes",
-            "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea",
-            "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai",
-            "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans",
-            "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians",
-            "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon",
-            "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"));
+    List<String> bookItems = new ArrayList<>();
     List<Integer> numOfChap = new ArrayList<>(Arrays.asList(50, 40, 27, 36, 34, 24, 21, 4, 31, 24, 22, 25, 29, 36, 10, 13, 10, 42, 150, 31, 12, 8, 66, 52, 5, 48,
             12, 14, 3, 9, 1, 4, 7, 3, 3, 3, 2, 14, 4, 28, 16, 24, 21, 28, 16, 16, 13, 6, 6, 4, 4, 5, 3, 6, 4, 3, 1, 13, 5, 5, 3, 5, 1, 1, 1, 22));
+    List<String> availVersions;
     List<String> availBookNames;
     List<Integer> availChapNums;
     List<Integer> availStartVerses;
     List<Integer> availEndVerses;
-    private Spinner spinner1,spinner2,spinner3,spinner4;
+    private Spinner spinner1, spinner2, spinner3, spinner4, spinner5;
     private NumberPicker numberPicker1,numberPicker2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
+        new FontHelper(this).initialize();
         setContentView(R.layout.activity_new_section);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -90,31 +74,14 @@ public class NewSectionActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
+        DBHandler dbHandler = new DBHandler(this);
+        version = "en_kjv";
+        bookItems = dbHandler.getBookNames(version);
+
         settingsPreferences = getSharedPreferences(SETTINGS_PREF, 0);
         indexPreferences = getSharedPreferences(INDEX_PREF,0);
         submit = (Button) findViewById(R.id.button);
-
-        /*DatabaseReference metaData = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("chunkSize");
-        metaData.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    chunkSize = dataSnapshot.getValue(Integer.class);
-                    Log.d("Meta data:","Fetched");
-                }
-                else{
-                    chunkSize = 3;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("DatabaseError:",databaseError.toString());
-            }
-        });*/
-
-        /*databaseReference = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());*/
-        addItemsOnBookNameSpinner();
+        addItemsOnVersionSpinner();
     }
 
     @Override
@@ -133,57 +100,24 @@ public class NewSectionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public void addItemsOnBookNameSpinner(){
-        /*availBookNames = bookItems;*/
-        availBookNames = new ArrayList<>();
-        spinner1 = (Spinner) findViewById(R.id.spinner1);
+    public void addItemsOnVersionSpinner() {
         DBHandler dbHandler = new DBHandler(this);
-        for(String s:bookItems){
-            if(indexPreferences.getBoolean(s,false) == false){
-                availBookNames.add(s);
-            }
+        availVersions = new ArrayList<>();
+
+        final List<Version> versions = dbHandler.getVersions();
+
+        for (int i = 0; i < versions.size(); i++) {
+            availVersions.add(versions.get(i).get_name() + " (" + versions.get(i).get_lang() + ")");
         }
+        spinner5 = findViewById(R.id.spinner5);
 
-        /*final ProgressDialog progressDialog1 = ProgressDialog.show(NewSectionActivity.this, "",
-                "Checking Bible data. Please wait...", true);
-
-        if(isNetworkAvailable()){
-            progressDialog1.show();
-        }*/
-
-        /*databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot child: dataSnapshot.getChildren()){
-                        availBookNames.remove(child.getKey());
-                    }
-                    Log.d("availBookNames:","Loaded");
-                }
-                progressDialog1.dismiss();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("DatabaseError:",databaseError.toString());
-                progressDialog1.dismiss();
-            }
-        });*/
-
-        ArrayAdapter<String> StringAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,availBookNames);
+        ArrayAdapter<String> StringAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, availVersions);
         StringAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner1.setAdapter(StringAdapter);
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner5.setAdapter(StringAdapter);
+        spinner5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                addItemsOnChapterNumSpinner(availBookNames.get(position));
+                addItemsOnBookNameSpinner(versions.get(position).get_id());
             }
 
             @Override
@@ -194,50 +128,35 @@ public class NewSectionActivity extends AppCompatActivity {
         StringAdapter.notifyDataSetChanged();
     }
 
-    public void addItemsOnChapterNumSpinner(final String bookName){
+    public void addItemsOnBookNameSpinner(final String version) {
+        spinner1 = (Spinner) findViewById(R.id.spinner1);
+
+        DBHandler dbHandler = new DBHandler(this);
+        availBookNames = dbHandler.getAvailableBooks(version);
+
+        ArrayAdapter<String> StringAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,availBookNames);
+        StringAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner1.setAdapter(StringAdapter);
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                addItemsOnChapterNumSpinner(version, availBookNames.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        StringAdapter.notifyDataSetChanged();
+    }
+
+    public void addItemsOnChapterNumSpinner(final String version, final String bookName) {
         spinner2 = (Spinner) findViewById(R.id.spinner2);
         availChapNums = new ArrayList<Integer>();
 
         DBHandler dbHandler = new DBHandler(this);
-        int n = dbHandler.getNumofChap(bookName);
-
-        for(int i=1;i<=n;i++){
-            boolean added = indexPreferences.getBoolean(bookName+"_"+i,false);
-            Log.d("addItemsOnChapter","Chapter " + i + " " + added);
-            if(!added){
-                availChapNums.add(i);
-            }
-        }
-
-        /*for(int i=1;i<=numOfChap.get(bookItems.indexOf(bookName));i++){
-            availChapNums.add(i);
-        }*/
-
-
-        /*final ProgressDialog progressDialog1 = ProgressDialog.show(NewSectionActivity.this, "",
-                "Checking Chapters data. Please wait...", true);
-
-        if(isNetworkAvailable()){
-            progressDialog1.show();
-        }
-
-        databaseReference.child(bookName).orderByKey().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot child:dataSnapshot.getChildren()){
-                        availChapNums.remove(Integer.parseInt(child.getKey()));
-                    }
-                }
-                progressDialog1.dismiss();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("DatabaseError:",databaseError.toString());
-                progressDialog1.dismiss();
-            }
-        });*/
+        availChapNums = dbHandler.getAvailableChaptersofBook(version, bookName);
 
         ArrayAdapter<Integer> IntegerAdapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item,availChapNums);
         IntegerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -245,7 +164,7 @@ public class NewSectionActivity extends AppCompatActivity {
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                addItemsOnStartVerseSpinner(bookName,availChapNums.get(position));
+                addItemsOnStartVerseSpinner(version, bookName, availChapNums.get(position));
 
             }
 
@@ -256,40 +175,15 @@ public class NewSectionActivity extends AppCompatActivity {
         });
     }
 
-    public void addItemsOnStartVerseSpinner(final String bookName, final int chapNum){
+    public void addItemsOnStartVerseSpinner(final String version, final String bookName, final int chapNum) {
         spinner3 = (Spinner) findViewById(R.id.spinner3);
         availStartVerses = new ArrayList<>();
         DBHandler dbHandler = new DBHandler(this);
-        numOfVerse = dbHandler.getNumOfVerse(bookName, chapNum);
+        numOfVerse = dbHandler.getNumOfVerse(version, bookName, chapNum);
         /*for (int i = 1; i <= numOfVerse; i++) {
             availStartVerses.add(i);
         }*/
-        availStartVerses = dbHandler.getAvailableVersesOfChap(bookName,chapNum);
-
-        /*final ProgressDialog progressDialog1 = ProgressDialog.show(NewSectionActivity.this, "",
-                "Checking Verses data. Please wait...", true);
-
-        if(isNetworkAvailable()){
-            progressDialog1.show();
-        }
-
-        databaseReference.child(bookName).child(String.valueOf(chapNum)).orderByKey().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot child:dataSnapshot.getChildren()){
-                        availStartVerses.remove(Integer.parseInt(child.getKey()));
-                    }
-                }
-                progressDialog1.dismiss();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("DatabaseError:",databaseError.toString());
-                progressDialog1.dismiss();
-            }
-        });*/
+        availStartVerses = dbHandler.getAvailableVersesOfChap(version, bookName, chapNum);
 
         ArrayAdapter<Integer> IntegerAdapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item,availStartVerses);
         IntegerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -297,7 +191,7 @@ public class NewSectionActivity extends AppCompatActivity {
         spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                addItemsOnEndVerseSpinner(bookName,chapNum,i);
+                addItemsOnEndVerseSpinner(version, bookName, chapNum, i);
             }
 
             @Override
@@ -305,16 +199,16 @@ public class NewSectionActivity extends AppCompatActivity {
             }
         });
         if(availStartVerses.size() == 0){
-            addItemsOnEndVerseSpinner(bookName,chapNum,0);
+            addItemsOnEndVerseSpinner(version, bookName, chapNum, 0);
         }
         IntegerAdapter.notifyDataSetChanged();
     }
 
-    public void addItemsOnEndVerseSpinner(String bookName,int chapNum,int startVersePos){
+    public void addItemsOnEndVerseSpinner(String version, String bookName, int chapNum, int startVersePos) {
         spinner4 = (Spinner) findViewById(R.id.spinner4);
         availEndVerses = new ArrayList<>();
         DBHandler dbHandler = new DBHandler(this);
-
+        this.version = version;
         Log.d("addItemsOnEVSpinner","setup");
         for(int i=startVersePos;i<availStartVerses.size();i++){
             if(i==availStartVerses.size()-1){
@@ -356,7 +250,7 @@ public class NewSectionActivity extends AppCompatActivity {
         DatabaseReference sections = FirebaseDatabase.getInstance().getReference("sections").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         String newSectionId = sections.push().getKey();
-        Section section = new Section(newSectionId, bookName, chapNum, startVerse, endVerse);
+        Section section = new Section(newSectionId, bookName, chapNum, startVerse, endVerse, version);
 
         sections.child(newSectionId).setValue(section);
         Log.d("Section:", "Added");
@@ -402,19 +296,13 @@ public class NewSectionActivity extends AppCompatActivity {
             userBible.child(String.valueOf(i)).child("memory").setValue(1);
         }*/
         /*Log.d("User Bible Data:","Added");*/
-        if(dbHandler.addedChapter(bookName,chapNum)){
-            indexPreferences.edit().putBoolean(bookName+"_"+chapNum,true).commit();
-            boolean addedBook = true;
-            for(int i=1;i<=dbHandler.getNumofChap(bookName);i++){
-                if (indexPreferences.getBoolean(bookName + "_" + i, false) == false) {
-                    addedBook = false;
-                    break;
-                }
-            }
-            if(addedBook){
-                indexPreferences.edit().putBoolean(bookName,true).commit();
+        if (dbHandler.addedChapter(version, bookName, chapNum)) {
+            dbHandler.setNotAvailableChap(version, bookName, chapNum);
+            if (dbHandler.getAvailableChaptersofBook(version, bookName).size() == 0) {
+                dbHandler.setNotAvailableBook(version, bookName);
                 Log.d("Submit","Book added");
             }
+
             Log.d("Submit","Chapter added");
         }
 
@@ -450,6 +338,7 @@ public class NewSectionActivity extends AppCompatActivity {
                 subChunk.setNextDateOfReview("NA");
             }
             subChunk.setMastered(false);
+            subChunk.set_version(section.get_version());
             chunks.add(subChunk);
             seq++;
             min = min+chunkSize;
@@ -470,6 +359,7 @@ public class NewSectionActivity extends AppCompatActivity {
                 subChunk.setNextDateOfReview("NA");
             }
             subChunk.setMastered(false);
+            subChunk.set_version(section.get_version());
             chunks.add(subChunk);
             seq++;
             min = min+chunkSize;

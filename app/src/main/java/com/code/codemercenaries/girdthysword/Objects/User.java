@@ -1,4 +1,4 @@
-package com.code.codemercenaries.girdthysword;
+package com.code.codemercenaries.girdthysword.Objects;
 
 import java.util.ArrayList;
 import java.util.Arrays;

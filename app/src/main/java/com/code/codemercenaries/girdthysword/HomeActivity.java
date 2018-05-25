@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -26,24 +27,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.code.codemercenaries.girdthysword.Color.ColorHelper;
+import com.code.codemercenaries.girdthysword.Database.DBHandler;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+import com.code.codemercenaries.girdthysword.Fragments.AllFragment;
+import com.code.codemercenaries.girdthysword.Fragments.OverdueFragment;
+import com.code.codemercenaries.girdthysword.Fragments.TodayFragment;
+import com.code.codemercenaries.girdthysword.Objects.Tutorial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.takusemba.spotlight.OnSpotlightEndedListener;
 import com.takusemba.spotlight.OnSpotlightStartedListener;
 import com.takusemba.spotlight.SimpleTarget;
 import com.takusemba.spotlight.Spotlight;
 
-import java.text.ParseException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HomeActivity extends AppCompatActivity
@@ -52,18 +58,14 @@ public class HomeActivity extends AppCompatActivity
     final String SETTINGS_PREF = "settings_pref";
     final String SYSTEM_PREF = "system_pref";
     CoordinatorLayout coordinatorLayout;
-    TabHost tabHost;
-    ListView today;
-    ListView overdue;
-    ListView tomorrow;
-    ListView all;
+
     FloatingActionButton fab;
     FloatingActionButton fab_add;
     FloatingActionButton fab_delete;
     TextView tv_add;
     TextView tv_delete;
     boolean fab_status;
-    //RelativeLayout layTab;
+
     LinearLayout back;
     Toolbar toolbar;
     SharedPreferences settingsPreferences;
@@ -79,45 +81,23 @@ public class HomeActivity extends AppCompatActivity
 
     String theme;
 
-    List<Chunk> allChunks;
-    List<Chunk> todayChunks;
-    List<Chunk> overdueChunks;
-    List<Chunk> tomorrowChunks;
-
     String tabTitle[] = {"OVERDUE", "TODAY", "ALL"};
     ArrayList<Integer> remainingCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
         setContentView(R.layout.activity_home);
+
+        new FontHelper(this).initialize();
+
         settingsPreferences = getSharedPreferences(SETTINGS_PREF, 0);
         theme = settingsPreferences.getString("theme", "original");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         back = (LinearLayout) findViewById(R.id.back);
-        /*layTab = (RelativeLayout) findViewById(R.id.layTab);*/
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        /*
-        tabHost = (TabHost) findViewById(R.id.tabhost); // initiate TabHost
-        today = (ListView) findViewById(R.id.today_list);
-        overdue = (ListView) findViewById(R.id.overdue_list);
-        tomorrow = (ListView) findViewById(R.id.tomorrow_list);
-        all = (ListView) findViewById(R.id.all_list);*/
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab_add = (FloatingActionButton) findViewById(R.id.fab_add);
@@ -142,10 +122,20 @@ public class HomeActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        //setupTabHost();
-        if (getSharedPreferences(SYSTEM_PREF, 0).getBoolean("show_tutorial_nav", true)) {
-            startTutorialNav();
+        ImageView logo = findViewById(R.id.logo);
+        InputStream ims = null;
+        try {
+            ims = getAssets().open("dark_logo.png");
+            Drawable d = Drawable.createFromStream(ims, null);
+            logo.setImageDrawable(d);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        //setupTabHost();
+        /*if (getSharedPreferences(SYSTEM_PREF, 0).getBoolean("show_tutorial_nav", true)) {
+            startTutorialNav();
+        }*/
 
     }
 
@@ -188,144 +178,35 @@ public class HomeActivity extends AppCompatActivity
         remainingCount.add(0);
 
         setupTabIcons();
-
-        try {
-            setupColors();
-            setupLists();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        setupColors();
         setupFabs();
 
     }
 
-    private Point getCenterPointOfView(View view) {
-        int[] location = new int[2];
-        view.getLocationInWindow(location);
-        int x = location[0] + view.getWidth() / 2;
-        int y = location[1] + view.getHeight() / 2;
-        return new Point(x, y);
-    }
-
     private void setupColors() {
-        theme = settingsPreferences.getString("theme", "original");
+        /*theme = settingsPreferences.getString("theme", "original");
         if (theme.equals("original")) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             back.setBackgroundColor(getResources().getColor(R.color.colorSword));
             //layTab.setBackgroundColor(getResources().getColor(R.color.colorSword));
-        } else if (theme.equals("dark")) {
-            toolbar.setBackgroundColor(getResources().getColor(R.color.colorSword));
-            //back.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            //layTab.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         } else if (theme.equals("white")) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             back.setBackgroundColor(getResources().getColor(android.R.color.white));
             //layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
-        }
-    }
-
-
-    private void setupLists() throws ParseException {
-
-        DBHandler dbHandler = new DBHandler(this);
-
-        //dbHandler.deleteAllChunks();
-        //dbHandler.deleteAllSections();
-
-        /*dbHandler.addChunk(new Chunk(1,"John",3,16,18, "17/10/2017", 1,1, false));
-        dbHandler.addChunk(new Chunk(1,"Romans",4,5,7, "18/10/2017", 1,2,false));
-        dbHandler.addChunk(new Chunk(1, "Romans",1,1,3, "10/10/2017", 1,3,false));
-        dbHandler.addSection(new Section("John",3,16,18,1));
-        dbHandler.addSection(new Section("Romans",4,5,7,2));
-        dbHandler.addSection(new Section("Romans",1,1,3,3));*/
-
-        allChunks = new ArrayList<Chunk>();
-        todayChunks = new ArrayList<Chunk>();
-        overdueChunks = new ArrayList<Chunk>();
-        tomorrowChunks = new ArrayList<Chunk>();
-
-        /*DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("chunks").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot d: dataSnapshot.getChildren()){
-                        allChunks.add(d.getValue(Chunk.class));
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("DatabaseError:",databaseError.toString());
-            }
-        });*/
-
-        /*allChunks = dbHandler.getAllChunks();
-
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar ca = Calendar.getInstance();
-        String currDate = df.format(ca.getTime());
-
-        ca.add(Calendar.DATE,1);
-        String tomDate = df.format(ca.getTime());
-
-        for (Chunk c : allChunks) {
-            Log.d("Reading:",c.toString());
-
-            if(!c.getNextDateOfReview().equals("NA")) {
-                Log.d("CurrDate:",currDate);
-                Log.d("DateObj:",c.getNextDateOfReview());
-                Date dateObj = df.parse(c.getNextDateOfReview());
-                Date currDateObj = df.parse(currDate);
-                Date tomDateObj = df.parse(tomDate);
-                if(currDateObj.equals(dateObj)){
-                    Log.d("Today",c.toString());
-                    todayChunks.add(c);
-                }
-                else if(dateObj.before(currDateObj)){
-                    overdueChunks.add(c);
-                }
-                else if(tomDateObj.equals(dateObj)) {
-                    tomorrowChunks.add(c);
-                }
-            }
-        }
-
-        for(Chunk c:todayChunks) {
-            Log.d("TodayList:",c.toString());
-        }
-        CustomListAdapter1 todayAdapter = new CustomListAdapter1(this,R.layout.chunk_custom_list1,todayChunks);
-        today.setAdapter(todayAdapter);
-        today.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HomeActivity.this,ReviewActivity.class);
-                String chunkId = todayChunks.get(i).getId();
-                intent.putExtra("EXTRA_CHUNK_ID", chunkId);
-                startActivity(intent);
-            }
-        });
-
-        CustomListAdapter1 overdueAdapter = new CustomListAdapter1(this,R.layout.chunk_custom_list1,overdueChunks);
-        overdue.setAdapter(overdueAdapter);
-        overdue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HomeActivity.this,ReviewActivity.class);
-                intent.putExtra("EXTRA_CHUNK_ID", overdueChunks.get(i).getId());
-                startActivity(intent);
-            }
-        });
-
-        CustomListAdapter1 tomorrowAdapter = new CustomListAdapter1(this,R.layout.chunk_custom_list1,tomorrowChunks);
-        tomorrow.setAdapter(tomorrowAdapter);
-
-        CustomListAdapter1 allAdapter = new CustomListAdapter1(this,R.layout.chunk_custom_list2,allChunks);
-        all.setAdapter(allAdapter);*/
-
+        } else if (theme.equals("red")) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            back.setBackgroundColor(getResources().getColor(R.color.red));
+            //layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
+        } else if (theme.equals("green")) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            back.setBackgroundColor(getResources().getColor(R.color.backHighlighter));
+            //layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
+        } else if (theme.equals("light_grey")) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            back.setBackgroundColor(getResources().getColor(R.color.light_grey));
+            //layTab.setBackgroundColor(getResources().getColor(android.R.color.white));
+        }*/
+        new ColorHelper(this).setDefaultTheme(toolbar, back);
     }
 
     private View prepareTabView(int pos) {
@@ -344,12 +225,9 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void setupTabIcons() {
-
         for (int i = 0; i < tabTitle.length; i++) {
             tabLayout.getTabAt(i).setCustomView(prepareTabView(i));
         }
-
-
     }
 
     private void setupFabs() {
@@ -359,10 +237,6 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                        */
                 if(fab_status == false) {
                     fab_show();
                     fab_status = true;
@@ -409,60 +283,6 @@ public class HomeActivity extends AppCompatActivity
         tv_delete.setVisibility(View.INVISIBLE);
     }
 
-    /*private void setupTabHost() {
-
-        TabHost.TabSpec spec; // Reusable TabSpec for each tab
-        tabHost.setup();
-
-        spec = tabHost.newTabSpec("Today");
-        spec.setIndicator("TODAY");
-        spec.setContent(R.id.tab1);
-        tabHost.addTab(spec);
-
-        spec = tabHost.newTabSpec("Overdue");
-        spec.setIndicator("OVERDUE");
-        spec.setContent(R.id.tab2);
-        tabHost.addTab(spec);
-
-        spec = tabHost.newTabSpec("Tomorrow");
-        spec.setIndicator("TOMORROW");
-        spec.setContent(R.id.tab3);
-        tabHost.addTab(spec);
-
-        spec = tabHost.newTabSpec("All");
-        spec.setIndicator("ALL");
-        spec.setContent(R.id.tab4);
-        tabHost.addTab(spec);
-
-        if (theme.equals("original")) {
-        } else if (theme.equals("white")) {
-        } else if (theme.equals("dark")) {
-            for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-                TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-                tv.setTextColor(getResources().getColor(android.R.color.white));
-            }
-        }
-
-        //set tab which one you want to open first time 0 or 1 or 2
-        tabHost.setCurrentTab(0);
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                switch(tabId){
-                    case "Today":
-                        break;
-                    case "Overdue":
-                        break;
-                    case "Tomorrow":
-                        break;
-                    case "All":
-                        break;
-                    default:
-                }
-            }
-        });
-    }*/
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -508,7 +328,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_bible) {
-            Intent intent = new Intent(HomeActivity.this,BibleActivity.class);
+            Intent intent = new Intent(HomeActivity.this, SelectVersionActivity.class);
             startActivity(intent);
         } /*else if (id == R.id.nav_rewards) {
             Intent intent = new Intent(HomeActivity.this,RewardsActivity.class);
@@ -520,13 +340,13 @@ public class HomeActivity extends AppCompatActivity
             Intent intent = new Intent(HomeActivity.this,ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_help) {
-            Intent intent = new Intent(HomeActivity.this, HelpActivity.class);
+            Intent intent = new Intent(HomeActivity.this, HomeScreenActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_about) {
-            Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
+            Intent intent = new Intent(HomeActivity.this, MainScreenActivity.class);
             startActivity(intent);
         }
 

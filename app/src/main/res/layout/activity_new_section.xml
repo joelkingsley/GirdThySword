@@ -21,13 +21,32 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/spinner1"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Version"
+                    android:textSize="24sp" />
+
+                <Spinner
+                    android:id="@+id/spinner5"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignStart="@+id/startVerse"
+                    android:layout_below="@+id/version"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="30dp" />
+
+                <TextView
                     android:id="@+id/bookName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_alignStart="@+id/spinner1"
+                    android:layout_below="@+id/spinner5"
+                    android:layout_marginTop="30dp"
                     android:fontFamily="sans-serif-condensed"
                     android:text="Book Name"
                     android:textSize="24sp" />
@@ -100,7 +119,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_below="@+id/spinner3"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="40dp"
                     android:paddingBottom="20dp"
                     android:text="Add" />
 
@@ -111,6 +131,7 @@
                     android:layout_alignEnd="@id/startVerse"
                     android:layout_alignStart="@+id/startVerse"
                     android:layout_below="@+id/startVerse" />
+
 
             </RelativeLayout>
         </LinearLayout>

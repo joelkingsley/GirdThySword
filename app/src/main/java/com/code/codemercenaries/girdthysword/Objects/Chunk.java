@@ -1,4 +1,4 @@
-package com.code.codemercenaries.girdthysword;
+package com.code.codemercenaries.girdthysword.Objects;
 
 /**
  * Created by Joel Kingsley on 17-10-2017.
@@ -15,11 +15,12 @@ public class Chunk {
     String _next_date_of_review;
     int _space;
     boolean _mastered;
+    String _version;
 
 
     public Chunk(String _id, int _seq, String _book_name, int _chapter_num,
                  int _start_verse_num, int _end_verse_num,
-                 String _next_date_of_review, int space, String _sec_id, boolean _mastered) {
+                 String _next_date_of_review, int space, String _sec_id, boolean _mastered, String _version) {
         this._id = _id;
         this._seq = _seq;
         this._book_name = _book_name;
@@ -30,11 +31,12 @@ public class Chunk {
         this._space = space;
         this._sec_id = _sec_id;
         this._mastered = _mastered;
+        this._version = _version;
     }
 
     public Chunk(int _seq, String _book_name, int _chapter_num,
                  int _start_verse_num, int _end_verse_num,
-                 String _next_date_of_review, int _space, String _sec_id, boolean _mastered) {
+                 String _next_date_of_review, int _space, String _sec_id, boolean _mastered, String _version) {
         this._seq = _seq;
         this._book_name = _book_name;
         this._chapter_num = _chapter_num;
@@ -44,6 +46,7 @@ public class Chunk {
         this._space = _space;
         this._sec_id = _sec_id;
         this._mastered = _mastered;
+        this._version = _version;
     }
 
     public Chunk() {
@@ -57,6 +60,7 @@ public class Chunk {
         this._space = 0;
         this._sec_id = "NA";
         this._mastered = false;
+        this._version = "NA";
     }
 
     public String getId() {
@@ -137,6 +141,15 @@ public class Chunk {
 
     public void setMastered(boolean _mastered) {
         this._mastered = _mastered;
+    }
+
+
+    public String get_version() {
+        return _version;
+    }
+
+    public void set_version(String _version) {
+        this._version = _version;
     }
 
     @Override

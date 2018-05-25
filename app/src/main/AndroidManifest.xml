@@ -38,10 +38,6 @@
             android:label="@string/title_activity_rewards"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".StatsActivity"
-            android:label="@string/title_activity_stats"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -69,10 +65,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ChapterListActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_chapter_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".VerseListActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_verse_list"
             android:parentActivityName=".ChapterListActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -109,6 +107,24 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SelectVersionActivity"
+            android:label="@string/title_activity_select_version"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".HomeScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:label=""
+            android:parentActivityName=".MainScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.HomeScreenActivity" />
+        </activity>
     </application>
 
 </manifest>

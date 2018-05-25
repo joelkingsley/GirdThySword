@@ -19,7 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class AboutActivity extends AppCompatActivity
@@ -35,19 +36,7 @@ public class AboutActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
+        new FontHelper(this).initialize();
         setContentView(R.layout.activity_about);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -193,7 +182,7 @@ public class AboutActivity extends AppCompatActivity
             Intent intent = new Intent(AboutActivity.this, HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bible) {
-            Intent intent = new Intent(AboutActivity.this, BibleActivity.class);
+            Intent intent = new Intent(AboutActivity.this, SelectVersionActivity.class);
             startActivity(intent);
         } /*else if (id == R.id.nav_rewards) {
             Intent intent = new Intent(BibleActivity.this,RewardsActivity.class);

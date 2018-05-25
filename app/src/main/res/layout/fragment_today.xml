@@ -3,7 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.code.codemercenaries.girdthysword.TodayFragment">
+    tools:context="com.code.codemercenaries.girdthysword.Fragments.TodayFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/app_theme_gradient" />
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -28,5 +33,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/empty_box" />
+        app:lottie_rawRes="@raw/empty_status" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/ripple_loading_animation" />
 </FrameLayout>

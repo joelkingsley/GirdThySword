@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="50dp"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/genesis"
             android:textSize="20sp"
@@ -43,15 +44,15 @@
             android:id="@+id/subheading"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-
             android:layout_alignParentStart="true"
             android:layout_below="@+id/heading"
+            android:layout_marginEnd="50dp"
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/genesis_1_1_10" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

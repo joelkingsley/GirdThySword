@@ -1,7 +1,7 @@
 <resources>
     <!-- Strings related to application -->
     <string name="app_name">GirdThySword</string>
-    <string name="title_activity_home">Home</string>
+    <string name="title_activity_home"></string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -55,14 +55,47 @@
     <string name="default_chunk_size">3</string>
     <string name="default_settings_list_title">Chunk Size</string>
 
-    <string name="default_font">fonts/coolvetica_rg.ttf</string>
-    <string name="default_font_name">coolvetica_rg</string>
+    <string name="default_font">fonts/NotoSans-CondensedBlack.ttf</string>
+    <string name="default_font_name">NotoSans-CondensedBlack</string>
 
     <string name="gnuolane_font">fonts/gnuolane_rg.ttf</string>
     <string name="gnuolane_font_name">gnuolane_rg</string>
 
     <string name="coolvetica_font_name">coolvetica_rg</string>
     <string name="coolvetica_font">fonts/coolvetica_rg.ttf</string>
+
+    <string name="accid_font_name">accid</string>
+    <string name="accid_font">fonts/accid.ttf</string>
+
+    <string name="notosans_eng_black_font">fonts/NotoSans-CondensedBlack.ttf</string>
+    <string name="notosans_eng_black_font_name">NotoSans-CondensedBlack</string>
+
+    <string name="notosans_tam_black_font">fonts/NotoSansTamil-CondensedBlack.ttf</string>>
+    <string name="notosans_tam_black_font_name">NotoSansTamil-CondensedBlack</string>
+
+    <string name="notosans_tam_light_font">fonts/NotoSansTamil-CondensedLight.ttf</string>>
+    <string name="notosans_tam_light_font_name">NotoSansTamil-CondensedLight</string>>
+
+    <string name="notosans_eng_light_font">fonts/NotoSans-CondensedLight.ttf</string>
+    <string name="notosans_eng_light_font_name">NotoSans-CondensedLight</string>
+
+    <string name="billyforges_demo_font">Billyforges_Demo.ttf</string>
+    <string name="billyforges_demo_font_name">Billyforges_Demo</string>
+
+    <string name="condition3D_regular_font">Condition3D-Regular.ttf</string>
+    <string name="condition3D_regular_font_name">Condition3D-Regular</string>
+
+    <string name="condition3D_italic_font">Condition3D-Italic.ttf</string>
+    <string name="condition3D_italic_font_name">Condition3D-Italic</string>
+
+    <string name="condition3DFilled_regular_font">Condition3DFilled-Regular.ttf</string>
+    <string name="condition3DFilled_regular_font_name">Condition3DFilled-Regular</string>
+
+    <string name="condition3DFilled_italic_font">Condition3DFilled-Italic.ttf</string>
+    <string name="condition3DFilled_italic_font_name">Condition3DFilled-Italic</string>
+
+    <string name="leprosy3DFilled_font">Leprosy3DFilled.ttf</string>
+    <string name="leprosy3DFilled_font_name">Leprosy3DFilled</string>
 
     <!-- Strings related to stats -->
     <string name="stats_text">Number of Reviews:0\nNumber of Chapters memorized:0</string>
@@ -106,5 +139,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab1">OVERDUE</string>
+    <string name="title_activity_select_version">Select Version</string>
+    <string name="title_activity_main_screen">MainScreen</string>
 
 </resources>

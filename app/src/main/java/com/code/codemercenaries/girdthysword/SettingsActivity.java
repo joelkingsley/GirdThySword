@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+import com.code.codemercenaries.girdthysword.ListAdapters.SCustomListAdapter1;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SettingsActivity extends AppCompatActivity
@@ -29,19 +31,7 @@ public class SettingsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
+        new FontHelper(this).initialize();
         setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,7 +108,7 @@ public class SettingsActivity extends AppCompatActivity
             Intent intent = new Intent(SettingsActivity.this, HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bible) {
-            Intent intent = new Intent(SettingsActivity.this, BibleActivity.class);
+            Intent intent = new Intent(SettingsActivity.this, SelectVersionActivity.class);
             startActivity(intent);
         } /*else if (id == R.id.nav_rewards) {
             Intent intent = new Intent(HomeActivity.this,RewardsActivity.class);

@@ -12,12 +12,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.code.codemercenaries.girdthysword.Database.DBHandler;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+import com.code.codemercenaries.girdthysword.Objects.Chunk;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ReviewActivity extends AppCompatActivity {
@@ -47,19 +49,7 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final String SETTINGS_PREF = "settings_pref";
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
+        new FontHelper(this).initialize();
         setContentView(R.layout.activity_review);
 
 
@@ -78,7 +68,7 @@ public class ReviewActivity extends AppCompatActivity {
         initialSpace = chunk.getSpace();
 
         for(int i=chunk.getStartVerseNum();i<=chunk.getEndVerseNum();i++){
-            ReadableVerse verse = dbHandler.getReadableVerse(chunk.getBookName(),chunk.getChapNum(),i);
+            ReadableVerse verse = dbHandler.getReadableVerse(chunk.get_version(), chunk.getBookName(), chunk.getChapNum(), i);
             readableVerseList.add(verse);
             tokenList.add( new StringTokenizer(verse.get_verse_text(),":;.?") );
         }
@@ -174,7 +164,12 @@ public class ReviewActivity extends AppCompatActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        if (chunk.get_version().equals("tam_org")) {
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ta");
+        } else {
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "eng"
+            );
+        }
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt));
         try {

@@ -83,15 +83,15 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Comments", "Initiate");
 
             settingsPreferences.edit().putInt("chunk_size", 3).apply();
-            settingsPreferences.edit().putString("theme", "original").apply();
+            settingsPreferences.edit().putString("theme", "light_grey").apply();
             settingsPreferences.edit().putString("font", getString(R.string.default_font_name)).apply();
 
-            for(int i=0;i<66;i++){
+            /*for(int i=0;i<66;i++){
                 indexPreferences.edit().putBoolean(bookNames[i], false).apply();
                 for(int j=1;j<=numOfChap[i];j++){
                     indexPreferences.edit().putBoolean(bookNames[i] + "_" + j, false).apply();
                 }
-            }
+            }*/
 
             // record the fact that the app has been started at least once
             systemPreferences.edit().putBoolean("initiated", false).apply();

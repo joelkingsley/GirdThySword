@@ -1,10 +1,10 @@
 package com.code.codemercenaries.girdthysword;
 
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,47 +15,37 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.airbnb.lottie.LottieAnimationView;
+import com.code.codemercenaries.girdthysword.Database.DBHandler;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+import com.code.codemercenaries.girdthysword.ListAdapters.BCustomListAdapter3;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class VerseListActivity extends AppCompatActivity {
 
     final String SYSTEM_PREF = "system_pref";
     SharedPreferences systemPreferences;
+    LottieAnimationView lottieAnimationView;
 
     TextView cd;
     ListView verseList;
 
     String bookName;
     int chapNum;
+    int numOfVerse;
     List<ReadableVerse> verses;
+    String version;
+    BCustomListAdapter3 bCustomListAdapter3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final String SETTINGS_PREF = "settings_pref";
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
+        new FontHelper(this).initialize();
         setContentView(R.layout.activity_verse_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,17 +56,13 @@ public class VerseListActivity extends AppCompatActivity {
 
         cd = (TextView) findViewById(R.id.chapterDesc);
         verseList = (ListView) findViewById(R.id.verseList);
-        bookName = getIntent().getExtras().getString("EXTRA_BOOK_NAME");
-        chapNum = getIntent().getExtras().getInt("EXTRA_CHAP_NUM");
+        bookName = getIntent().getExtras().getString("EXTRA_BOOK_NAME", "Genesis");
+        chapNum = getIntent().getExtras().getInt("EXTRA_CHAP_NUM", 1);
+        version = getIntent().getExtras().getString("EXTRA_VERSION", "en_kjv");
 
         verses = new ArrayList<>();
 
         cd.setText(bookName + " " + chapNum);
-
-        /*systemPreferences = getSharedPreferences(SYSTEM_PREF,0);
-        systemPreferences.edit().putString("curr_book_name", bookName).commit();
-        systemPreferences.edit().putInt("curr_chap_num", chapNum).commit();*/
-
         setupList();
     }
 
@@ -92,52 +78,83 @@ public class VerseListActivity extends AppCompatActivity {
 
     private void setupList(){
         DBHandler dbHandler = new DBHandler(this);
-        //List<ReadableVerse> verses = dbHandler.getChapterWithMemory(bookName,chapNum);
-        final List<Integer> memList = dbHandler.getMemorizedVerses(bookName, chapNum);
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        numOfVerse = dbHandler.getNumOfVerse(version, bookName, chapNum);
 
-        progressDialog.setMessage("Loading Data from Firebase Database");
 
-        progressDialog.show();
+        bCustomListAdapter3 = new BCustomListAdapter3(VerseListActivity.this, R.layout.bible_custom_list3, verses);
+        verseList.setAdapter(bCustomListAdapter3);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("bible").child(bookName).child("chapters").child(String.valueOf(chapNum - 1)).child("verses");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        lottieAnimationView = findViewById(R.id.animation_view);
+        lottieAnimationView.playAnimation();
+        lottieAnimationView.setVisibility(View.VISIBLE);
+
+        new DisplayVerses().execute();
+
+        verseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String label = verses.get(position).get_book_name() + " " + verses.get(position).get_chap_num() + ":" + verses.get(position).get_verse_num();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(label, verses.get(position).get_verse_text());
 
-                long n = snapshot.getChildrenCount();
-                for (int i = 0; i < n; i++) {
-                    String verse = snapshot.child(String.valueOf(i)).child(String.valueOf(i + 1)).getValue(String.class);
-                    if (memList.contains(i + 1))
-                        verses.add(new ReadableVerse(bookName, chapNum, i + 1, verse, 2));
-                    else
-                        verses.add(new ReadableVerse(bookName, chapNum, i + 1, verse, 0));
-                }
-
-
-                BCustomListAdapter3 bCustomListAdapter3 = new BCustomListAdapter3(VerseListActivity.this, R.layout.bible_custom_list3, verses);
-                verseList.setAdapter(bCustomListAdapter3);
-                verseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String label = verses.get(position).get_book_name() + " " + verses.get(position).get_chap_num() + ":" + verses.get(position).get_verse_num();
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText(label, verses.get(position).get_verse_text());
-                        clipboard.setPrimaryClip(clip);
-                        Toast.makeText(VerseListActivity.this, "Copied to clipboard",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-                progressDialog.dismiss();
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(VerseListActivity.this, "Copied to clipboard",
+                        Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                progressDialog.dismiss();
-            }
-
         });
+    }
+
+    private class DisplayVerses extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            DBHandler dbHandler = new DBHandler(getApplicationContext());
+
+            for (int i = 0; i < numOfVerse; i++) {
+                String verse = dbHandler.getVerse(version, bookName, chapNum, i + 1);
+                verses.add(new ReadableVerse(bookName, chapNum, i + 1, verse, 0));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            lottieAnimationView.pauseAnimation();
+            lottieAnimationView.setVisibility(View.INVISIBLE);
+            bCustomListAdapter3.notifyDataSetChanged();
+            new UpdateStats().execute();
+        }
+    }
+
+    private class UpdateStats extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            DBHandler dbHandler = new DBHandler(getApplicationContext());
+            List<Integer> memList = dbHandler.getMemorizedVerses(version, bookName, chapNum);
+            List<Integer> addList = dbHandler.getAvailableVersesOfChap(version, bookName, chapNum);
+
+            for (int i = 0; i < numOfVerse; i++) {
+                if (memList.contains(i + 1)) {
+                    ReadableVerse readableVerse = verses.get(i);
+                    readableVerse.set_memory(3);
+                    verses.set(i, readableVerse);
+                } else if (!addList.contains(i + 1)) {
+                    ReadableVerse readableVerse = verses.get(i);
+                    readableVerse.set_memory(2);
+                    verses.set(i, readableVerse);
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            bCustomListAdapter3.notifyDataSetChanged();
+        }
     }
 
 }

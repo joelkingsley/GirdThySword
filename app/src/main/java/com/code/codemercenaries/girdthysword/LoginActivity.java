@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.code.codemercenaries.girdthysword.Objects.User;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -54,16 +55,17 @@ public class LoginActivity extends AppCompatActivity {
 
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
-        background = (ImageView) findViewById(R.id.background);
+        background = (ImageView) findViewById(R.id.girdThySword);
 
+        InputStream ims;
         try {
-            InputStream ims = getAssets().open("login-bg-sword.jpg");
+            ims = getAssets().open("dark_logo.png");
             // load image as Drawable
             Drawable d = Drawable.createFromStream(ims, null);
             // set image to ImageView
             background.setImageDrawable(d);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         signInButton.setOnClickListener(new View.OnClickListener() {

@@ -19,7 +19,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TabHost;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import com.code.codemercenaries.girdthysword.Database.DBHandler;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+import com.code.codemercenaries.girdthysword.ListAdapters.BCustomListAdapter1;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class BibleActivity extends AppCompatActivity
@@ -29,7 +35,11 @@ public class BibleActivity extends AppCompatActivity
     ListView ot;
     ListView nt;
 
-    String[] otBooks = new String[]{"Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua",
+    String version;
+
+    List<String> bookNames;
+
+    /*String[] otBooks = new String[]{"Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua",
             "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles",
             "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes",
             "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea",
@@ -38,25 +48,15 @@ public class BibleActivity extends AppCompatActivity
     String[] ntBooks = new String[]{"Matthew", "Mark", "Luke", "John", "Acts", "Romans",
             "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians",
             "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon",
-            "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"};
+            "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"};*/
+
+    List<String> otBooks;
+    List<String> ntBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final String SETTINGS_PREF = "settings_pref";
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
+        new FontHelper(this).initialize();
         setContentView(R.layout.activity_bible);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,6 +80,15 @@ public class BibleActivity extends AppCompatActivity
         tabHost = (TabHost) findViewById(R.id.tabhost2);
         ot = (ListView) findViewById(R.id.ot_list);
         nt = (ListView) findViewById(R.id.nt_list);
+
+        DBHandler dbHandler = new DBHandler(this);
+
+        version = getIntent().getExtras().getString("EXTRA_VERSION", "en_kjv");
+
+        bookNames = dbHandler.getBookNames(version);
+
+        otBooks = new ArrayList<>(bookNames.subList(0, 39));
+        ntBooks = new ArrayList<>(bookNames.subList(39, 66));
 
         setupTabHost();
         setupLists();
@@ -133,7 +142,7 @@ public class BibleActivity extends AppCompatActivity
             Intent intent = new Intent(BibleActivity.this,HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bible) {
-
+            Intent intent = new Intent(BibleActivity.this, SelectVersionActivity.class);
         } /*else if (id == R.id.nav_rewards) {
             Intent intent = new Intent(BibleActivity.this,RewardsActivity.class);
             startActivity(intent);
@@ -198,19 +207,9 @@ public class BibleActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent  = new Intent(BibleActivity.this,ChapterListActivity.class);
-                intent.putExtra("EXTRA_BOOK_NAME",otBooks[i]);
-                /*final ProgressDialog dialog = ProgressDialog.show(BibleActivity.this, "",
-                        "Loading. Please wait...", true);
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
-                    }
-                },3000);*/
+                intent.putExtra("EXTRA_VERSION", version);
+                intent.putExtra("EXTRA_BOOK_NAME", otBooks.get(i));
                 startActivity(intent);
-
             }
         });
 
@@ -220,8 +219,9 @@ public class BibleActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent  = new Intent(BibleActivity.this,ChapterListActivity.class);
-                intent.putExtra("EXTRA_BOOK_NAME",ntBooks[i]);
-                Log.d("Intent call:","to ChapterList from Bible, Extra:"+ntBooks[i]);
+                intent.putExtra("EXTRA_VERSION", version);
+                intent.putExtra("EXTRA_BOOK_NAME", ntBooks.get(i));
+                Log.d("Intent call:", "to ChapterList from Bible, Extra:" + ntBooks.get(i));
                 startActivity(intent);
             }
         });

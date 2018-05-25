@@ -13,10 +13,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.code.codemercenaries.girdthysword.Database.DBHandler;
+import com.code.codemercenaries.girdthysword.Font.FontHelper;
+import com.code.codemercenaries.girdthysword.ListAdapters.CustomListAdapter2;
+import com.code.codemercenaries.girdthysword.Objects.Section;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DeleteSectionActivity extends AppCompatActivity {
@@ -25,6 +29,7 @@ public class DeleteSectionActivity extends AppCompatActivity {
     SharedPreferences indexPreferences;
 
     ListView sectionList;
+    String version;
 
     List<String> sectionIds;
     List<Section> sections;
@@ -32,20 +37,7 @@ public class DeleteSectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final String SETTINGS_PREF = "settings_pref";
-        if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.gnuolane_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.gnuolane_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        } else if (getSharedPreferences(SETTINGS_PREF, 0).getString("font", getString(R.string.default_font_name)).equals(getString(R.string.coolvetica_font_name))) {
-            CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                    .setDefaultFontPath(getString(R.string.coolvetica_font))
-                    .setFontAttrId(R.attr.fontPath)
-                    .build()
-            );
-        }
+        new FontHelper(this).initialize();
         setContentView(R.layout.activity_delete_section);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,6 +45,8 @@ public class DeleteSectionActivity extends AppCompatActivity {
         ActionBar actionBar = this.getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+
+        version = "en_kjv";
 
         sectionList = (ListView) findViewById(R.id.sectionList);
 
@@ -78,8 +72,10 @@ public class DeleteSectionActivity extends AppCompatActivity {
                                 // continue with delete
                                 dbHandler.deleteSection(sectionIds.get(i));
                                 dbHandler.setMemoryToNotAdded(sections.get(i));
-                                indexPreferences.edit().putBoolean(sections.get(i).get_book_name() + "_" + sections.get(i).get_chap_num(), false).apply();
-                                indexPreferences.edit().putBoolean(sections.get(i).get_book_name(), false).apply();
+                                //indexPreferences.edit().putBoolean(sections.get(i).get_book_name() + "_" + sections.get(i).get_chap_num(), false).apply();
+                                //indexPreferences.edit().putBoolean(sections.get(i).get_book_name(), false).apply();
+                                dbHandler.setAvailableBook(sections.get(i).get_version(), sections.get(i).get_book_name());
+                                dbHandler.setAvailableChap(sections.get(i).get_version(), sections.get(i).get_book_name(), sections.get(i).get_chap_num());
                                 setupList();
                             }
                         })

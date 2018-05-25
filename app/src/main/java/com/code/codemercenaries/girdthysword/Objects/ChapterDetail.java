@@ -1,10 +1,10 @@
-package com.code.codemercenaries.girdthysword;
+package com.code.codemercenaries.girdthysword.Objects;
 
 /**
  * Created by Joel Kingsley on 20-12-2017.
  */
 
-class ChapterDetail {
+public class ChapterDetail {
     String bookName;
     int chapNum;
     int percentage;
