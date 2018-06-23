@@ -1,7 +1,9 @@
 package com.code.codemercenaries.girdthysword;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -27,6 +29,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.apache.commons.io.FileUtils;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -102,6 +106,11 @@ public class ProfileActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 signOut();
+                FileUtils.deleteQuietly(getCacheDir());
+                if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+                    ((ActivityManager) getSystemService(ACTIVITY_SERVICE))
+                            .clearApplicationUserData(); // note: it has a return value!
+                }
             }
         });
     }

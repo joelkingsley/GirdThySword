@@ -77,7 +77,7 @@ public class ChapterListActivity extends AppCompatActivity
         bt = (TextView) findViewById(R.id.bookTitle);
 
         if (getIntent().getExtras() != null) {
-            bookName = getIntent().getExtras().getString("EXTRA_BOOK_NAME");
+            bookName = getIntent().getExtras().getString("EXTRA_BOOK_NAME", "Genesis");
             version = getIntent().getExtras().getString("EXTRA_VERSION", "en_kjv");
         }
         else{

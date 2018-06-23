@@ -1,5 +1,6 @@
 package com.code.codemercenaries.girdthysword.ListAdapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.LayoutRes;
@@ -22,12 +23,12 @@ import java.util.List;
  */
 
 public class BCustomListAdapter3 extends ArrayAdapter<ReadableVerse> {
-    Context context;
+    Activity context;
     int resource;
 
     List<ReadableVerse> verses;
 
-    public BCustomListAdapter3(@NonNull Context context, @LayoutRes int resource, @NonNull List<ReadableVerse> objects) {
+    public BCustomListAdapter3(@NonNull Activity context, @LayoutRes int resource, @NonNull List<ReadableVerse> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -40,7 +41,6 @@ public class BCustomListAdapter3 extends ArrayAdapter<ReadableVerse> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(this.resource, parent, false);
-
 
         TextView number = (TextView) rowView.findViewById(R.id.number);
         TextView text = (TextView) rowView.findViewById(R.id.text);

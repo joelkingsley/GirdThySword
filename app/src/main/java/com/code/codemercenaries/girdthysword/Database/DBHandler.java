@@ -110,7 +110,7 @@ public class DBHandler extends SQLiteAssetHelper {
             } while (cursor.moveToNext());
         }
         Log.d("Function:", "getBookNames");
-        db.close();
+
         return bookNames;
     }
 
@@ -121,9 +121,8 @@ public class DBHandler extends SQLiteAssetHelper {
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
         Log.d("getNumOfVerse:", bookName + " " + chapNum + ", " + count);
-        return count - 1
 
-                ;
+        return count - 1;
     }
 
     public int getNumofChap(String version, String bookName) {
@@ -133,6 +132,7 @@ public class DBHandler extends SQLiteAssetHelper {
         int count = cursor.getCount();
         cursor.close();
         Log.d("getNumOfChap:", bookName + ", " + count);
+
         return count - 1;
     }
 
@@ -149,7 +149,7 @@ public class DBHandler extends SQLiteAssetHelper {
             } while (cursor.moveToNext());
         }
         Log.d("Function:", "getVerse");
-        db.close();
+
         return verse;
     }
 
@@ -163,10 +163,12 @@ public class DBHandler extends SQLiteAssetHelper {
         if (cursorTotal.getCount() == cursorAdded.getCount()) {
             cursorAdded.close();
             cursorTotal.close();
+
             return true;
         } else {
             cursorAdded.close();
             cursorTotal.close();
+
             return false;
         }
     }
@@ -190,7 +192,44 @@ public class DBHandler extends SQLiteAssetHelper {
 
         cursorTotal.close();
         Log.d("addedChapter():", "True");
+
         return true;
+    }
+
+    public int getTotalNumberOfVersesMemorized(String version) {
+        int nVerses = -1;
+        SQLiteDatabase db = getWritableDatabase();
+        String selectQuery = "SELECT COUNT(*) FROM " + version + " WHERE " + B_KEY_MEMORY + "=" + CODE_MEMORIZED + " AND " + B_KEY_VERSE_NUM + ">" + 0;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            nVerses = cursor.getInt(0);
+        }
+
+        return nVerses;
+    }
+
+    public int getTotalNumberOfChaptersMemorized(String version) {
+        int nChapters = -1;
+        SQLiteDatabase db = getWritableDatabase();
+        String selectQuery = "SELECT COUNT(*) FROM " + version + " WHERE " + B_KEY_MEMORY + "=" + CODE_MEMORIZED + " AND " + B_KEY_VERSE_NUM + "=" + 0 + " AND " + B_KEY_CHAP_NUM + ">" + 0;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            nChapters = cursor.getInt(0);
+        }
+
+        return nChapters;
+    }
+
+    public int getTotalNumberOfBooksMemorized(String version) {
+        int nBooks = -1;
+        SQLiteDatabase db = getWritableDatabase();
+        String selectQuery = "SELECT COUNT(*) FROM " + version + " WHERE " + B_KEY_MEMORY + "=" + CODE_MEMORIZED + " AND " + B_KEY_VERSE_NUM + "=" + 0 + " AND " + B_KEY_CHAP_NUM + "=" + 0;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            nBooks = cursor.getInt(0);
+        }
+
+        return nBooks;
     }
 
     public List<Integer> getAvailableVersesOfChap(String version, String bookName, int chapNum) {
@@ -204,6 +243,7 @@ public class DBHandler extends SQLiteAssetHelper {
                 Log.d("AvailableVerses:", bookName + " " + chapNum + " " + Integer.parseInt(cursor.getString(0)));
             } while (cursor.moveToNext());
         }
+
         return availVerses;
     }
 
@@ -220,6 +260,7 @@ public class DBHandler extends SQLiteAssetHelper {
                 Log.d("AvailableChapters:", bookName + Integer.parseInt(cursor.getString(0)));
             } while (cursor.moveToNext());
         }
+
         return availChapters;
     }
 
@@ -235,6 +276,7 @@ public class DBHandler extends SQLiteAssetHelper {
                 Log.d("AvailableBooks:", cursor.getString(0));
             } while (cursor.moveToNext());
         }
+
         return availBooks;
     }
 
@@ -248,7 +290,7 @@ public class DBHandler extends SQLiteAssetHelper {
         cursor.moveToFirst();
         String id = cursor.getString(0);
 
-        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user_bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         userBible.child(version).child(bookName).child(Integer.toString(0)).child(Integer.toString(0)).setValue(CODE_ADDED);
 
         Log.d("setNotAvailable:", bookName + " " + 0);
@@ -273,7 +315,7 @@ public class DBHandler extends SQLiteAssetHelper {
         cursor.moveToFirst();
         String id = cursor.getString(0);
 
-        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user_bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         userBible.child(version).child(bookName).child(Integer.toString(0)).child(Integer.toString(0)).setValue(CODE_NOT_ADDED);
 
         cv.put(B_KEY_BOOK_NAME, bookName);
@@ -297,7 +339,7 @@ public class DBHandler extends SQLiteAssetHelper {
         cursor.moveToFirst();
         String id = cursor.getString(0);
 
-        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user_bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         userBible.child(version).child(bookName).child(Integer.toString(chapNum)).child(Integer.toString(0)).setValue(CODE_ADDED);
 
         cv.put(B_KEY_BOOK_NAME, bookName);
@@ -321,7 +363,7 @@ public class DBHandler extends SQLiteAssetHelper {
         cursor.moveToFirst();
         String id = cursor.getString(0);
 
-        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user_bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         userBible.child(version).child(bookName).child(Integer.toString(chapNum)).child(Integer.toString(0)).setValue(CODE_NOT_ADDED);
 
         cv.put(B_KEY_BOOK_NAME, bookName);
@@ -330,6 +372,25 @@ public class DBHandler extends SQLiteAssetHelper {
         cv.put(B_KEY_VERSE_TEXT, "Dummy Text");
         cv.put(B_KEY_MEMORY, 0);
         db.update(version, cv, "id=" + id, null);
+
+    }
+
+    public void setVerseMemoryInDBOnly(String version, String bookName, int chapNum, int verseNum, int memory) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ReadableVerse readableVerse = getReadableVerse(version, bookName, chapNum, verseNum);
+
+        ContentValues cv = new ContentValues();
+        Log.d("setVerseMemoryInDBOnly:", version + "," + bookName + "," + chapNum + "," + verseNum + "," + memory);
+
+        cv.put(B_KEY_BOOK_NAME, bookName);
+        cv.put(B_KEY_CHAP_NUM, chapNum);
+        cv.put(B_KEY_VERSE_NUM, verseNum);
+        cv.put(B_KEY_VERSE_TEXT, readableVerse.get_verse_text());
+        cv.put(B_KEY_MEMORY, memory);
+
+        db.update(version, cv, "id=" + readableVerse.get_id(), null);
+
 
     }
 
@@ -345,6 +406,7 @@ public class DBHandler extends SQLiteAssetHelper {
             } while (cursor.moveToNext());
 
         }
+
         return memorizedVerses;
     }
 
@@ -370,9 +432,9 @@ public class DBHandler extends SQLiteAssetHelper {
 
     public void setMemoryToAdded(Section section) {
         String bookName = section.get_book_name();
-        int chapNum = section.get_chap_num();
+        int chapNum = section.get_chapter_num();
 
-        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user_bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         Log.d("setMemoryToAdded:", section.toString());
@@ -393,9 +455,9 @@ public class DBHandler extends SQLiteAssetHelper {
 
     public void setMemoryToNotAdded(Section section) {
         String bookName = section.get_book_name();
-        int chapNum = section.get_chap_num();
+        int chapNum = section.get_chapter_num();
 
-        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user_bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         Log.d("setMemoryToAdded:", section.toString());
@@ -415,7 +477,7 @@ public class DBHandler extends SQLiteAssetHelper {
 
     public void setSectionToMemorized(Section section) {
         String bookName = section.get_book_name();
-        int chapNum = section.get_chap_num();
+        int chapNum = section.get_chapter_num();
 
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -431,6 +493,7 @@ public class DBHandler extends SQLiteAssetHelper {
 
             db.update(section.get_version(), cv, "id=" + readableVerse.get_id(), null);
         }
+
     }
 
     public void setChunkToMemorized(Chunk chunk) {
@@ -440,7 +503,7 @@ public class DBHandler extends SQLiteAssetHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user_bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         Log.d("setChunkToMemorized:", chunk.toString());
         for (int i = chunk.getStartVerseNum(); i <= chunk.getEndVerseNum(); i++) {
@@ -454,6 +517,7 @@ public class DBHandler extends SQLiteAssetHelper {
             cv.put(B_KEY_MEMORY, CODE_MEMORIZED);
             db.update(chunk.get_version(), cv, "id=" + readableVerse.get_id(), null);
         }
+
     }
 
 
@@ -468,14 +532,14 @@ public class DBHandler extends SQLiteAssetHelper {
         sections.child(newSectionId).setValue(section);
 
         values.put(S_KEY_BOOK_NAME, section.get_book_name());
-        values.put(S_KEY_CHAP_NUM, section.get_chap_num());
+        values.put(S_KEY_CHAP_NUM, section.get_chapter_num());
         values.put(S_KEY_START_VERSE_NUM, section.get_start_verse_num());
         values.put(S_KEY_END_VERSE_NUM, section.get_end_verse_num());
         values.put(S_KEY_ID, section.get_sec_id());
         values.put(S_KEY_VER_ID, section.get_version());
 
         db.insert(TABLE_SECTION, null, values);
-        db.close();
+
         Log.d("Function:", "Add Section " + section.toString());
     }
 
@@ -536,7 +600,7 @@ public class DBHandler extends SQLiteAssetHelper {
             do {
                 s.set_sec_id(secId);
                 s.set_book_name(cursor.getString(1));
-                s.set_chap_num(Integer.parseInt(cursor.getString(2)));
+                s.set_chapter_num(Integer.parseInt(cursor.getString(2)));
                 s.set_start_verse_num(Integer.parseInt(cursor.getString(3)));
                 s.set_end_verse_num(Integer.parseInt(cursor.getString(4)));
                 s.set_version(cursor.getString(5));
@@ -599,7 +663,7 @@ public class DBHandler extends SQLiteAssetHelper {
             Log.d("Function:", "Added Master Chunk");
             Log.d("mergeSection:", chunk.toString());
         }
-        db.close();
+
         Log.d("Function:", "Add " + secId);
     }
 
@@ -670,7 +734,7 @@ public class DBHandler extends SQLiteAssetHelper {
         values.put(C_KEY_VER_ID, chunk.get_version());
 
         db.insert(TABLE_CHUNK, null, values);
-        db.close();
+
         Log.d("Function:", "Add Chunk " + chunk.getSecId() + ": " + chunk.toString());
 
     }
@@ -807,7 +871,7 @@ public class DBHandler extends SQLiteAssetHelper {
 
         Log.d("Function:", "Get Chunk");
         cursor.close();
-        db.close();
+
         return chunk;
     }
 
@@ -875,6 +939,6 @@ public class DBHandler extends SQLiteAssetHelper {
                 chunks.child(chunkId).child(C_KEY_NEXT_DATE_OF_REVIEW).setValue(initDOR);
             }
         }
-        db.close();
+
     }
 }

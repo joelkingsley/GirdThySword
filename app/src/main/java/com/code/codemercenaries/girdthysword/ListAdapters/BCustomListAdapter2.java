@@ -46,7 +46,7 @@ public class BCustomListAdapter2 extends ArrayAdapter<ChapterDetail> {
 
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_menu_bible);
         imageView.setImageBitmap(bitmap);
-        heading.setText("Chapter " + chapterDetails.get(position).getChapNum());
+        heading.setText(context.getResources().getString(R.string.chapter_with_num, chapterDetails.get(position).getChapNum()));
         percent.setText(((chapterDetails.get(position).getPercentage()) / chapterDetails.get(position).gettotalVerses()) + "%");
         number.setText(chapterDetails.get(position).getversesMemorized() + "/" + chapterDetails.get(position).gettotalVerses());
 

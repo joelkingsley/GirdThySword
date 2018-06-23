@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,16 @@ public class SelectVersionActivity extends AppCompatActivity {
 
         new FontHelper(this).initialize();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         DBHandler dbHandler = new DBHandler(this);
         versionList = dbHandler.getVersions();
 
@@ -39,7 +50,7 @@ public class SelectVersionActivity extends AppCompatActivity {
         versions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(SelectVersionActivity.this, BibleActivity.class);
+                Intent intent = new Intent(SelectVersionActivity.this, BibleScreenActivity.class);
                 intent.putExtra("EXTRA_VERSION", versionList.get(i).get_id());
                 startActivity(intent);
             }

@@ -1,5 +1,6 @@
 package com.code.codemercenaries.girdthysword.ListAdapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,11 +23,11 @@ import java.util.List;
  */
 
 public class BCustomListAdapter1 extends ArrayAdapter<String> {
-    Context context;
+    Activity context;
     int resource;
     List<String> bookNames;
 
-    public BCustomListAdapter1(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> objects) {
+    public BCustomListAdapter1(@NonNull Activity context, @LayoutRes int resource, @NonNull List<String> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;

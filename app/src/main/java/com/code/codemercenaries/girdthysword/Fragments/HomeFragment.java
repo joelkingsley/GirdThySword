@@ -39,7 +39,6 @@ public class HomeFragment extends Fragment {
     FloatingActionButton fab, fab_add, fab_delete;
     TextView tv_add, tv_delete;
 
-    String tabTitle[] = {"OVERDUE", "TODAY", "ALL"};
     boolean fab_status;
     ArrayList<Integer> remainingCount;
 
@@ -109,14 +108,16 @@ public class HomeFragment extends Fragment {
         todayFragment = new TodayFragment();
         overDueFragment = new OverdueFragment();
         allFragment = new AllFragment();
-        adapter.addFragment(overDueFragment, "OVERDUE");
-        adapter.addFragment(todayFragment, "TODAY");
-        adapter.addFragment(allFragment, "ALL");
+        String tabTitle[] = {getString(R.string.overdue), getString(R.string.today), getString(R.string.all)};
+        adapter.addFragment(overDueFragment, tabTitle[0]);
+        adapter.addFragment(todayFragment, tabTitle[1]);
+        adapter.addFragment(allFragment, tabTitle[2]);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
     }
 
     private View prepareTabView(int pos) {
+        String tabTitle[] = {getString(R.string.overdue), getString(R.string.today), getString(R.string.all)};
         View view = getLayoutInflater().inflate(R.layout.custom_tab, null);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
         TextView tv_count = (TextView) view.findViewById(R.id.tv_count);
@@ -132,6 +133,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupTabIcons() {
+        String tabTitle[] = {getString(R.string.overdue), getString(R.string.today), getString(R.string.all)};
         for (int i = 0; i < tabTitle.length; i++) {
             tabLayout.getTabAt(i).setCustomView(prepareTabView(i));
         }

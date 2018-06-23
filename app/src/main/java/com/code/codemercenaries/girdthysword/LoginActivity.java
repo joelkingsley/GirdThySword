@@ -3,10 +3,12 @@ package com.code.codemercenaries.girdthysword;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +16,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.code.codemercenaries.girdthysword.Database.DBHandler;
+import com.code.codemercenaries.girdthysword.Objects.Chunk;
+import com.code.codemercenaries.girdthysword.Objects.Section;
 import com.code.codemercenaries.girdthysword.Objects.User;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -41,12 +46,15 @@ import java.io.InputStream;
 public class LoginActivity extends AppCompatActivity {
 
     private final static int RC_SIGN_IN = 2;
+    final String SYSTEM_PREF = "system_pref";
     private final String TAG = "LoginActivity";
     SignInButton signInButton;
     FirebaseAuth mAuth;
     GoogleApiClient mGoogleApiClient;
     FirebaseAuth.AuthStateListener mAuthListener;
     ImageView background;
+    TextToSpeech tts;
+    SharedPreferences systemPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
         background = (ImageView) findViewById(R.id.girdThySword);
+
+        systemPreferences = getSharedPreferences(SYSTEM_PREF, 0);
 
         InputStream ims;
         try {
@@ -96,13 +106,17 @@ public class LoginActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.child("registered").getValue(boolean.class) != null) {
                                     Log.d("Firebase:", "Logged in");
+                                    if (!systemPreferences.getBoolean("first_time", false)) {
+                                        downloadToDatabase();
+                                        systemPreferences.edit().putBoolean("first_time", true).apply();
+                                    }
                                 } else {
                                     dataSnapshot.getRef().setValue(new User(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail()));
                                     Log.d("Firebase:", "Created new user");
                                 }
                                 //theme = dataSnapshot.child("theme").getValue(String.class);
                                 progressDialog.dismiss();
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, MainScreenActivity.class);
                                 startActivity(intent);
                             }
 
@@ -111,10 +125,20 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d("Firebase:", "Initialization failed");
                                 Log.d("DatabaseError", databaseError.toString());
                                 progressDialog.dismiss();
-                                Toast.makeText(LoginActivity.this, "Initialization failed", Toast.LENGTH_LONG);
+                                Toast.makeText(LoginActivity.this, "Initialization failed", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
+                } else {
+                    /*tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                        @Override
+                        public void onInit(int status) {
+                            if(status != TextToSpeech.ERROR){
+                                tts.setLanguage(Locale.UK);
+                                tts.speak("Welcome to GirdThySword! Please login using your Google Account to join the club.", TextToSpeech.QUEUE_ADD, null);
+                            }
+                        }
+                    });*/
                 }
             }
         };
@@ -162,18 +186,10 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
                 Toast.makeText(this, "Logging in", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "First time");
             } else {
                 Toast.makeText(LoginActivity.this, "Authorization went wrong", Toast.LENGTH_LONG).show();
             }
-            /*try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-                Toast.makeText(LoginActivity.this,"Authorization went wrong",Toast.LENGTH_LONG).show();
-            }*/
         }
     }
 
@@ -219,5 +235,121 @@ public class LoginActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void downloadToDatabase() {
+
+        try {
+            DatabaseReference chunks = FirebaseDatabase.getInstance().getReference("chunks").child(mAuth.getCurrentUser().getUid());
+            DatabaseReference sections = FirebaseDatabase.getInstance().getReference("sections").child(mAuth.getCurrentUser().getUid());
+            DatabaseReference users = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
+            DatabaseReference userBible = FirebaseDatabase.getInstance().getReference("user-bible").child(mAuth.getCurrentUser().getUid());
+            ;
+
+            Log.d(TAG, "Download");
+
+            chunks.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DBHandler dbHandler = new DBHandler(getApplicationContext());
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        /*String _id, int _seq, String _book_name, int _chapter_num,
+                        int _start_verse_num, int _end_verse_num,
+                        String _next_date_of_review, int space, String _sec_id, boolean _mastered, String _version*/
+                        String id = snapshot.child("_" + DBHandler.C_KEY_ID).getValue(String.class);
+                        int seq = snapshot.child("_" + DBHandler.C_KEY_SEQ).getValue(int.class);
+                        String bookName = snapshot.child("_" + DBHandler.C_KEY_BOOK_NAME).getValue(String.class);
+                        int chapNum = snapshot.child("_" + DBHandler.C_KEY_CHAP_NUM).getValue(int.class);
+                        int startNum = snapshot.child("_" + DBHandler.C_KEY_START_VERSE_NUM).getValue(int.class);
+                        int endNum = snapshot.child("_" + DBHandler.C_KEY_END_VERSE_NUM).getValue(int.class);
+                        String nextDateOfReview = snapshot.child("_" + DBHandler.C_KEY_NEXT_DATE_OF_REVIEW).getValue(String.class);
+                        int space = snapshot.child("_" + DBHandler.C_KEY_SPACE).getValue(int.class);
+                        String secId = snapshot.child("_" + DBHandler.C_KEY_SEC_ID).getValue(String.class);
+                        boolean mastered = snapshot.child("_" + DBHandler.C_KEY_MASTERED).getValue(Boolean.class);
+                        String version = snapshot.child("_" + DBHandler.C_KEY_VER_ID).getValue(String.class);
+                        dbHandler.addChunk(new Chunk(id, seq, bookName, chapNum, startNum, endNum, nextDateOfReview, space, secId, mastered, version));
+                        Log.d(TAG, "Chunk " + id);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("Login:", databaseError.toString());
+                }
+            });
+
+            sections.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DBHandler dbHandler = new DBHandler(getApplicationContext());
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        /*String _id, String _book_name, int _chapter_num, int _start_verse_num, int _end_verse_num, String _version*/
+                        String id = snapshot.child("_" + DBHandler.S_KEY_ID).getValue(String.class);
+                        String bookName = snapshot.child("_" + DBHandler.S_KEY_BOOK_NAME).getValue(String.class);
+                        int chapNum = snapshot.child("_" + DBHandler.S_KEY_CHAP_NUM).getValue(int.class);
+                        int startNum = snapshot.child("_" + DBHandler.S_KEY_START_VERSE_NUM).getValue(int.class);
+                        int endNum = snapshot.child("_" + DBHandler.S_KEY_END_VERSE_NUM).getValue(int.class);
+                        String version = snapshot.child("_" + DBHandler.S_KEY_VER_ID).getValue(String.class);
+                        dbHandler.addSection(new Section(id, bookName, chapNum, startNum, endNum, version));
+                        Log.d(TAG, "Section " + id);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("Login:", databaseError.toString());
+                }
+            });
+
+            users.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null && dataSnapshot.child("score") != null && dataSnapshot.child("verses_memorized") != null) {
+                        systemPreferences.edit().putLong("verses_memorized", dataSnapshot.child("verses_memorized").getValue(int.class)).apply();
+                        systemPreferences.edit().putInt("score", dataSnapshot.child("score").getValue(int.class)).apply();
+                        Log.d(TAG, "UserBible");
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("Login:", databaseError.toString());
+                }
+            });
+
+            userBible.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DBHandler dbHandler = new DBHandler(getApplicationContext());
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String version = snapshot.getKey();
+                        Log.d(TAG, "Version:" + version);
+                        for (DataSnapshot book : snapshot.getChildren()) {
+                            String bookName = book.getKey();
+                            Log.d(TAG, "Book Name:" + bookName);
+                            for (DataSnapshot chap : book.getChildren()) {
+                                int chapNum = Integer.parseInt(chap.getKey());
+                                Log.d(TAG, "Chap Num:" + chapNum);
+                                for (DataSnapshot verse : chap.getChildren()) {
+                                    int verseNum = Integer.parseInt(verse.getKey());
+                                    int memory = verse.getValue(int.class);
+                                    dbHandler.setVerseMemoryInDBOnly(version, bookName, chapNum, verseNum, memory);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context="com.code.codemercenaries.girdthysword.Fragments.TodayFragment">
 
-    <View
+    <!--<View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/app_theme_gradient" />
+        android:background="@drawable/app_theme_gradient" />-->
 
     <!-- TODO: Update blank fragment layout -->
 

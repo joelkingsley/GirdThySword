@@ -8,8 +8,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/light_grey">
+        android:layout_height="60dp">
 
     </android.support.design.widget.TabLayout>
 
@@ -31,7 +30,7 @@
         android:visibility="visible"
         app:fabSize="normal"
         app:layout_anchorGravity="bottom|right"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"

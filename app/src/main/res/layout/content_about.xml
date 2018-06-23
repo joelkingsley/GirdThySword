@@ -23,7 +23,7 @@
             android:contentDescription="@string/round_logo_desc"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            app:srcCompat="@mipmap/ic_sword_dark_round" />
+            app:srcCompat="@mipmap/ic_sword_round" />
 
         <TextView
             android:id="@+id/textView3"

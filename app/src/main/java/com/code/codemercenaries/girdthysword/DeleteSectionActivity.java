@@ -26,6 +26,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class DeleteSectionActivity extends AppCompatActivity {
 
     final String INDEX_PREF = "index_pref";
+    String SYSTEM_PREF = "system_pref";
     SharedPreferences indexPreferences;
 
     ListView sectionList;
@@ -75,7 +76,8 @@ public class DeleteSectionActivity extends AppCompatActivity {
                                 //indexPreferences.edit().putBoolean(sections.get(i).get_book_name() + "_" + sections.get(i).get_chap_num(), false).apply();
                                 //indexPreferences.edit().putBoolean(sections.get(i).get_book_name(), false).apply();
                                 dbHandler.setAvailableBook(sections.get(i).get_version(), sections.get(i).get_book_name());
-                                dbHandler.setAvailableChap(sections.get(i).get_version(), sections.get(i).get_book_name(), sections.get(i).get_chap_num());
+                                dbHandler.setAvailableChap(sections.get(i).get_version(), sections.get(i).get_book_name(), sections.get(i).get_chapter_num());
+
                                 setupList();
                             }
                         })

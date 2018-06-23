@@ -308,7 +308,7 @@ public class NewSectionActivity extends AppCompatActivity {
 
         Toast.makeText(NewSectionActivity.this, "Added " + section.toString() + ":" + newSectionId,
                 Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(NewSectionActivity.this,HomeActivity.class);
+        Intent intent = new Intent(NewSectionActivity.this, HomeScreenActivity.class);
         startActivity(intent);
     }
 
@@ -325,7 +325,7 @@ public class NewSectionActivity extends AppCompatActivity {
             Chunk subChunk = new Chunk();
             subChunk.setBookName(section
                     .get_book_name());
-            subChunk.setChapNum(section.get_chap_num());
+            subChunk.setChapNum(section.get_chapter_num());
             subChunk.setSeq(seq);
             subChunk.setSpace(1);
             subChunk.setStartVerseNum(min);
@@ -346,7 +346,7 @@ public class NewSectionActivity extends AppCompatActivity {
         if(max-min>=0){
             Chunk subChunk = new Chunk();
             subChunk.setBookName(section.get_book_name());
-            subChunk.setChapNum(section.get_chap_num());
+            subChunk.setChapNum(section.get_chapter_num());
             subChunk.setSeq(seq);
             subChunk.setSpace(1);
             subChunk.setStartVerseNum(min);

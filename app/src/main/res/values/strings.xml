@@ -24,16 +24,10 @@
     <string name="speech_prompt">Say something&#8230;</string>
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
 
-    <string name="delete_section">Delete Section</string>
-    <string name="add_section">Add Section</string>
-    <string name="home">Home</string>
-    <string name="bible">Bible</string>
     <string name="rewards">Rewards</string>
     <string name="statistics">Statistics</string>
     <string name="profile">Profile</string>
     <string name="about">About</string>
-    <string name="help">Help</string>
-    <string name="settings">Settings</string>
 
     <!-- Strings related to activity titles -->
     <string name="title_activity_review">Review</string>
@@ -79,20 +73,9 @@
     <string name="notosans_eng_light_font">fonts/NotoSans-CondensedLight.ttf</string>
     <string name="notosans_eng_light_font_name">NotoSans-CondensedLight</string>
 
-    <string name="billyforges_demo_font">Billyforges_Demo.ttf</string>
-    <string name="billyforges_demo_font_name">Billyforges_Demo</string>
+    <string name="litecraft_font">LifeCraft_Font.ttf</string>
+    <string name="litecraft_font_name">LifeCraft_Font</string>
 
-    <string name="condition3D_regular_font">Condition3D-Regular.ttf</string>
-    <string name="condition3D_regular_font_name">Condition3D-Regular</string>
-
-    <string name="condition3D_italic_font">Condition3D-Italic.ttf</string>
-    <string name="condition3D_italic_font_name">Condition3D-Italic</string>
-
-    <string name="condition3DFilled_regular_font">Condition3DFilled-Regular.ttf</string>
-    <string name="condition3DFilled_regular_font_name">Condition3DFilled-Regular</string>
-
-    <string name="condition3DFilled_italic_font">Condition3DFilled-Italic.ttf</string>
-    <string name="condition3DFilled_italic_font_name">Condition3DFilled-Italic</string>
 
     <string name="leprosy3DFilled_font">Leprosy3DFilled.ttf</string>
     <string name="leprosy3DFilled_font_name">Leprosy3DFilled</string>
@@ -141,5 +124,38 @@
     <string name="tab1">OVERDUE</string>
     <string name="title_activity_select_version">Select Version</string>
     <string name="title_activity_main_screen">MainScreen</string>
+
+
+    <!-- Clean -->
+    <string name="chapter_with_num">Chapter %1$d</string>
+    <string name="bookname_with_num">%1$s %2$d</string>
+    <string name="scroll_indicator"><![CDATA[< >]]></string>
+    <string name="start_scroll_indicator"><![CDATA[>]]></string>
+    <string name="end_scroll_indicator"><![CDATA[<]]></string>
+    <string name="language">Language</string>
+    <string name="overdue">OVERDUE</string>
+    <string name="today">TODAY</string>
+    <string name="all">ALL</string>
+    <string name="english_iso">eng</string>
+    <string name="tamil_iso">tam</string>
+    <string name="default_display_name">Joel Kingsley</string>
+    <string name="home">Home</string>
+    <string name="stats">Stats</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="delete_section">Delete Section</string>
+    <string name="add_section">Add Section</string>
+    <string name="bible">Bible</string>
+    <string name="default_level">Lvl. %1d (%2s)</string>
+    <string name="default_verses_memorized">999999</string>
+    <string name="default_score">999999</string>
+    <string name="verses_memorized_text">Verses Memorized</string>
+    <string name="score_text">Score</string>
+    <string name="click_to_log_out_and_exit">Click to Log out and Exit</string>
+    <string name="help">Help</string>
+    <string name="settings">Settings</string>
+    <string name="build_no">Build 1.9</string>
+    <string name="retain">Memorize the Bible</string>
+    <string name="read_and_listen">Read the Bible</string>
+
 
 </resources>

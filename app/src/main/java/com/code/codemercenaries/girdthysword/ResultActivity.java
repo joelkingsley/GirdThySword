@@ -102,7 +102,7 @@ public class ResultActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ResultActivity.this,HomeActivity.class);
+                Intent intent = new Intent(ResultActivity.this, HomeScreenActivity.class);
                 startActivity(intent);
             }
         });
