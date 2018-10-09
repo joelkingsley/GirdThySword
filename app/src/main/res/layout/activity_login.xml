@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.code.codemercenaries.girdthysword.LoginActivity">
+    android:background="@color/colorPrimary"
+    tools:context="com.code.codemercenaries.girdthysword.Activities.LoginActivity">
 
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:alpha="10"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/googleg_standard_color_18" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
@@ -29,18 +20,17 @@
 
     </com.google.android.gms.common.SignInButton>
 
-    <TextView
+    <ImageView
         android:id="@+id/girdThySword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="GirdThySword"
-        android:textColor="@android:color/white"
-        android:textSize="45sp"
-        android:textStyle="bold|italic" />
+        android:layout_marginTop="80dp"
+        android:scaleX="0.9"
+        android:scaleY="0.9"
+        android:src="@drawable/common_google_signin_btn_icon_dark"
+        tools:ignore="MissingPrefix" />
 
 
 </RelativeLayout>

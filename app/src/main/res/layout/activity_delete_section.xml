@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.code.codemercenaries.girdthysword.DeleteSectionActivity">
+    tools:context="com.code.codemercenaries.girdthysword.Activities.DeleteSectionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -18,13 +18,13 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
             <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/title"
-                android:text="@string/title_activity_delete_section"
                 android:layout_marginEnd="60dp"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
+                android:text="@string/title_activity_delete_section"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"

@@ -5,12 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.code.codemercenaries.girdthysword.AboutActivity"
+    tools:context="com.code.codemercenaries.girdthysword.Activities.AboutActivity"
     tools:showIn="@layout/app_bar_about">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,7 +23,7 @@
             android:contentDescription="@string/round_logo_desc"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            app:srcCompat="@mipmap/ic_sword_dark_round" />
+            app:srcCompat="@mipmap/ic_sword_round" />
 
         <TextView
             android:id="@+id/textView3"
@@ -139,7 +137,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="Version 1.0 (Beta)"
+            android:text="Version 2.0: Exodus (Beta)"
             android:textAlignment="center"
             android:textSize="15sp" />
 

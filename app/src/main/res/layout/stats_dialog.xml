@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/close_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white"
+                android:tint="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/ic_close_notification" />
+
+            <TextView
+                android:id="@+id/verses_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Verses Memorized"
+                android:textSize="15sp"
+                tools:ignore="MissingPrefix" />
+
+            <TextView
+                android:id="@+id/nVerses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="123/"
+                android:textSize="30sp"
+                tools:ignore="MissingPrefix" />
+
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@+id/verses_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/chapters_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Chapters Memorized"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/nChapters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="123/"
+                android:textSize="30sp" />
+
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@+id/chapters_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/books_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Books Memorized"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/nBooks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="123/"
+                android:textSize="30sp" />
+
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@+id/books_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="50dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

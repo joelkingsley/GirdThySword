@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "98049517626",
+    "firebase_url": "https://girdthysword-79d79.firebaseio.com",
+    "project_id": "girdthysword-79d79",
+    "storage_bucket": "girdthysword-79d79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98049517626:android:a82369bcf2866a5a",
+        "android_client_info": {
+          "package_name": "com.wordpress.joelkingsley.girdthysword"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98049517626-5a04ugkegjoajoogn0q4k223bn6tu4ei.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wordpress.joelkingsley.girdthysword",
+            "certificate_hash": "10ffd3f711989682f1b9a0c707f9d4b59010b880"
+          }
+        },
+        {
+          "client_id": "98049517626-hrpnv8uidulieah2ig15kriqa31jfkik.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNW0An1SML7Iq1yTzZHpW5ZgD3W0cmh20"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98049517626-hrpnv8uidulieah2ig15kriqa31jfkik.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98049517626:android:753051ce8a16a3e6",
+        "android_client_info": {
+          "package_name": "com.code.codemercenaries.girdthysword"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98049517626-d6csp2c853v11fj8o254foja98jvjmfa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.code.codemercenaries.girdthysword",
+            "certificate_hash": "10ffd3f711989682f1b9a0c707f9d4b59010b880"
+          }
+        },
+        {
+          "client_id": "98049517626-hrpnv8uidulieah2ig15kriqa31jfkik.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNW0An1SML7Iq1yTzZHpW5ZgD3W0cmh20"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98049517626-hrpnv8uidulieah2ig15kriqa31jfkik.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GirdThySword</string>
+    <string name="all">அனைத்து</string>
+    <string name="today">இன்று</string>
+    <string name="overdue">தாமதம்</string>
+    <string name="language">மொழி</string>
+    <string name="chapter_with_num">அதிகாரம் %1$d</string>
+    <string name="stats">புள்ளிவிவரங்கள்</string>
+    <string name="leaderboard">லீடர்போர்டு</string>
+    <string name="delete_section">பிரிவு நீக்கு</string>
+    <string name="home">முகப்பு</string>
+    <string name="bible">வேதாகமம்</string>
+    <string name="add_section">பிரிவு கூட்டு</string>
+    <string name="title_activity_select_version">பதிப்பைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="default_level">நிலை. %1d (%2s)</string>
+    <string name="verses_memorized_text">வசனங்கள் நினைவில்</string>
+    <string name="score_text">மதிப்பெண்</string>
+    <string name="click_to_log_out_and_exit">வெளியேற கிளிக் செய்யவும்</string>
+    <string name="help">உதவி</string>
+    <string name="settings">" அமைப்புகள்"</string>
+    <string name="build_no">பதிப்பு 2.0</string>
+    <string name="retain">மனப்பாடம்</string>
+    <string name="read_and_listen">வேதத்தை வாசி</string>
+    <string name="sample_answer">"முதலாவதாக, பைபிளின் ஒரு பகுதியை நீங்கள் நினைவில் வைக்க வேண்டும். ஒரு முறை நீங்கள் அழுத்திப் பிரிவானது பிரிவின் அளவுக்கு சமமான அளவிற்கு உடைக்கும் (நீங்கள் அமைப்பு மெனுவில் துணுக்கை அளவு மாற்றலாம்). தினமும் உங்களுக்கு ஒதுக்கப்படும் துகள்களை நினைவில் வைத்துக்கொள்வதால், அந்த துண்டின் வசனங்கள் எழுதுவதன் மூலம் துணுக்கை மற்றும் மறுபரிசீலனை சொடுக்கி விடுவீர்கள். நீங்கள் அதை எப்படி துல்லியமாகப் படிப்பது என்பதைப் பொறுத்து, அடுத்த மறு மதிப்பாய்வு நீட்டிக்கப்படும். ஒருங்கிணைக்கப்பட்ட பைபிளில், நீங்கள் மனனம் செய்துள்ள வசனங்களைச் சாப்பிடுவது, பச்சை நிறமாக மாறும், மேலும் நினைவில் நிற்கும் வசனங்கள் மஞ்சள் நிறத்தில் தோன்றும். "</string>
+    <string name="sample_question">நான் குழப்பிவிட்டேன். நான் ஒரு கண்ணோட்டத்தை எங்கு பெறலாம்?</string>
+    <string name="title_activity_answer">பதில்</string>
+    <string name="default_settings_list_title">பகுதி அளவு</string>
+    <string name="default_settings_list_desc">ஒவ்வொரு பிரிவிலும் உள்ள வசனங்களின் எண்ணிக்கை</string>
+    <string name="title_activity_about">பற்றி</string>
+    <string name="title_your_input">உங்கள் உள்ளீடு</string>
+    <string name="title_verse">வசனம்</string>
+    <string name="rewards">வெகுமதிகள்</string>
+    <string name="statistics">புள்ளியியல்</string>
+</resources>

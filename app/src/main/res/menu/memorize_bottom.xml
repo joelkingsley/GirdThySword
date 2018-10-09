@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_menu_home_dark"
+        android:iconTint="@android:color/white"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/action_stats"
+        android:icon="@drawable/ic_action_stats"
+        android:iconTint="@android:color/white"
+        android:title="@string/stats" />
+    <item
+        android:id="@+id/action_leaderboard"
+        android:icon="@drawable/ic_action_leaderboard"
+        android:iconTint="@android:color/white"
+        android:title="@string/leaderboard" />
+    <!--<item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_settings_dark"
+        android:iconTint="@android:color/white"
+        android:title="Settings" />-->
+</menu>

@@ -6,16 +6,19 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_sword_dark"
+        android:icon="@mipmap/ic_sword"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_sword_dark_round"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_sword_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,89 +27,85 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".BibleActivity"
-            android:label="@string/title_activity_bible"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RewardsActivity"
-            android:label="@string/title_activity_rewards"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".StatsActivity"
-            android:label="@string/title_activity_stats"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ReviewActivity"
-            android:label="@string/title_activity_review"
-            android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.code.codemercenaries.girdthysword.HomeActivity" />
-        </activity>
-        <activity
-            android:name=".NewSectionActivity"
-            android:label="@string/title_activity_new_section"
-            android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.code.codemercenaries.girdthysword.HomeActivity" />
-        </activity>
-        <activity
-            android:name=".ResultActivity"
+            android:name=".Activities.ResultActivity"
             android:label="@string/title_result"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ChapterListActivity"
-            android:label="@string/title_activity_chapter_list"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".VerseListActivity"
-            android:label="@string/title_activity_verse_list"
-            android:parentActivityName=".ChapterListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.code.codemercenaries.girdthysword.ChapterListActivity" />
-        </activity>
-        <activity
-            android:name=".DeleteSectionActivity"
-            android:label="@string/title_activity_delete_section"
-            android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.code.codemercenaries.girdthysword.HomeActivity" />
-        </activity>
-        <activity
-            android:name=".HelpActivity"
-            android:label="@string/title_activity_help"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".AboutActivity"
+            android:name=".Activities.AboutActivity"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AnswerActivity"
-            android:label="@string/title_activity_answer"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.SelectVersionActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_select_version"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.Activities.HomeScreenActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.MainScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.HomeScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:label=""
+            android:parentActivityName=".Activities.MainScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.Activities.HomeScreenActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.HelpScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".Activities.MainScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.Activities.MainScreenActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.AnswerScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".Activities.HelpScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.Activities.HelpScreenActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.BibleScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".Activities.SelectVersionActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.Activities.SelectVersionActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.ChapterListScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".Activities.BibleScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.Activities.BibleScreenActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.VerseListScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".Activities.ChapterListScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.code.codemercenaries.girdthysword.Activities.ChapterListScreenActivity" />
+        </activity>
     </application>
 
 </manifest>
