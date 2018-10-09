@@ -65,6 +65,9 @@ public class LeaderboardFragment extends Fragment {
                     String UID = snapshot.getKey();
                     Long versesMemorized = -snapshot.child("versesMemorized").getValue(Long.class);
                     String displayName = snapshot.child("displayName").getValue(String.class);
+                    if (displayName.length() > 25) {
+                        displayName = displayName.substring(0, 25) + "...";
+                    }
                     String profileURL = snapshot.child("profileURL").getValue(String.class);
                     int level = snapshot.child("level").getValue(int.class);
                     String status = snapshot.child("status").getValue(String.class);

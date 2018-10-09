@@ -86,9 +86,7 @@ public class AllFragment extends Fragment {
 
         allAdapter = new CustomListAdapter1(mActivity, R.layout.chunk_custom_list2, chunks);
 
-        for (int i = 0; i < chunks.size(); i++) {
-            Log.d("All Chunks:", chunks.toString());
-        }
+        Log.d("All Chunks:", chunks.toString());
 
         if (chunks.size() == 0) {
             defaultText.setVisibility(View.VISIBLE);

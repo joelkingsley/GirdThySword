@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.code.codemercenaries.girdthysword.ChapterListScreenActivity;
+import com.code.codemercenaries.girdthysword.Activities.ChapterListScreenActivity;
 import com.code.codemercenaries.girdthysword.Database.DBHandler;
 import com.code.codemercenaries.girdthysword.ListAdapters.BCustomListAdapter1;
 import com.code.codemercenaries.girdthysword.R;

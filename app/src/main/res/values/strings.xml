@@ -1,144 +1,147 @@
 <resources>
     <!-- Strings related to application -->
     <string name="app_name">GirdThySword</string>
-    <string name="title_activity_home"></string>
+    <string name="title_activity_home" translatable="false"></string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="import_tag">Import</string>
-    <string name="gallery">Gallery</string>
-    <string name="slideshow">Slideshow</string>
-    <string name="tools">Tools</string>
-    <string name="communicate">Communicate</string>
-    <string name="share">Share</string>
-    <string name="send">Send</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="import_tag" translatable="false">Import</string>
+    <string name="gallery" translatable="false">Gallery</string>
+    <string name="slideshow" translatable="false">Slideshow</string>
+    <string name="tools" translatable="false">Tools</string>
+    <string name="communicate" translatable="false">Communicate</string>
+    <string name="share" translatable="false">Share</string>
+    <string name="send" translatable="false">Send</string>
 
-    <string name="genesis">Genesis 1:1-3</string>
-    <string name="genesis_1_1_10">Genesis 1:1-10</string>
+    <string name="genesis" translatable="false">Genesis 1:1-3</string>
+    <string name="genesis_1_1_10" translatable="false">Genesis 1:1-10</string>
 
     <!-- Strings related to review -->
     <string name="title_verse">Verse</string>
     <string name="title_your_input">Your Input</string>
-    <string name="speech_prompt">Say something&#8230;</string>
-    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
+    <string name="speech_prompt" translatable="false">Say something&#8230;</string>
+    <string name="speech_not_supported" translatable="false">Sorry! Your device doesn\'t support speech input</string>
 
     <string name="rewards">Rewards</string>
     <string name="statistics">Statistics</string>
-    <string name="profile">Profile</string>
-    <string name="about">About</string>
+    <string name="profile" translatable="false">Profile</string>
+    <string name="about" translatable="false">About</string>
 
     <!-- Strings related to activity titles -->
-    <string name="title_activity_review">Review</string>
-    <string name="title_activity_bible">Bible</string>
-    <string name="title_activity_rewards">Rewards</string>
-    <string name="title_activity_stats">Statistics</string>
-    <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_new_section">Add Section</string>
-    <string name="title_activity_chapter_list">Chapters</string>
-    <string name="title_activity_verse_list">Verses</string>
-    <string name="title_activity_delete_section">Delete Section</string>
-    <string name="title_result">Result</string>
-    <string name="title_activity_help">Help</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_review" translatable="false">Review</string>
+    <string name="title_activity_bible" translatable="false">Bible</string>
+    <string name="title_activity_rewards" translatable="false">Rewards</string>
+    <string name="title_activity_stats" translatable="false">Statistics</string>
+    <string name="title_activity_profile" translatable="false">Profile</string>
+    <string name="title_activity_new_section" translatable="false">Add Section</string>
+    <string name="title_activity_chapter_list" translatable="false">Chapters</string>
+    <string name="title_activity_verse_list" translatable="false">Verses</string>
+    <string name="title_activity_delete_section" translatable="false">Delete Section</string>
+    <string name="title_result" translatable="false">Result</string>
+    <string name="title_activity_help" translatable="false">Help</string>
+    <string name="title_activity_settings" translatable="false">Settings</string>
     <string name="title_activity_about">About</string>
 
     <!-- Strings related to settings -->
     <string name="default_settings_list_desc">Number of verses in each chunk</string>
-    <string name="default_chunk_size">3</string>
+    <string name="default_chunk_size" translatable="false">3</string>
     <string name="default_settings_list_title">Chunk Size</string>
 
-    <string name="default_font">fonts/NotoSans-CondensedBlack.ttf</string>
-    <string name="default_font_name">NotoSans-CondensedBlack</string>
+    <string name="default_font" translatable="false">fonts/NotoSans-CondensedBlack.ttf</string>
+    <string name="default_font_name" translatable="false">NotoSans-CondensedBlack</string>
 
-    <string name="gnuolane_font">fonts/gnuolane_rg.ttf</string>
-    <string name="gnuolane_font_name">gnuolane_rg</string>
+    <string name="gnuolane_font" translatable="false">fonts/gnuolane_rg.ttf</string>
+    <string name="gnuolane_font_name" translatable="false">gnuolane_rg</string>
 
-    <string name="coolvetica_font_name">coolvetica_rg</string>
-    <string name="coolvetica_font">fonts/coolvetica_rg.ttf</string>
+    <string name="coolvetica_font_name" translatable="false">coolvetica_rg</string>
+    <string name="coolvetica_font" translatable="false">fonts/coolvetica_rg.ttf</string>
 
-    <string name="accid_font_name">accid</string>
-    <string name="accid_font">fonts/accid.ttf</string>
+    <string name="accid_font_name" translatable="false">accid</string>
+    <string name="accid_font" translatable="false">fonts/accid.ttf</string>
 
-    <string name="notosans_eng_black_font">fonts/NotoSans-CondensedBlack.ttf</string>
-    <string name="notosans_eng_black_font_name">NotoSans-CondensedBlack</string>
+    <string name="notosans_eng_black_font" translatable="false">fonts/NotoSans-CondensedBlack.ttf</string>
+    <string name="notosans_eng_black_font_name" translatable="false">NotoSans-CondensedBlack</string>
 
-    <string name="notosans_tam_black_font">fonts/NotoSansTamil-CondensedBlack.ttf</string>>
-    <string name="notosans_tam_black_font_name">NotoSansTamil-CondensedBlack</string>
+    <string name="notosans_tam_black_font" translatable="false">fonts/NotoSansTamil-CondensedBlack.ttf</string>
+    >
+    <string name="notosans_tam_black_font_name" translatable="false">NotoSansTamil-CondensedBlack</string>
 
-    <string name="notosans_tam_light_font">fonts/NotoSansTamil-CondensedLight.ttf</string>>
-    <string name="notosans_tam_light_font_name">NotoSansTamil-CondensedLight</string>>
+    <string name="notosans_tam_light_font" translatable="false">fonts/NotoSansTamil-CondensedLight.ttf</string>
+    >
+    <string name="notosans_tam_light_font_name" translatable="false">NotoSansTamil-CondensedLight</string>
+    >
 
-    <string name="notosans_eng_light_font">fonts/NotoSans-CondensedLight.ttf</string>
-    <string name="notosans_eng_light_font_name">NotoSans-CondensedLight</string>
+    <string name="notosans_eng_light_font" translatable="false">fonts/NotoSans-CondensedLight.ttf</string>
+    <string name="notosans_eng_light_font_name" translatable="false">NotoSans-CondensedLight</string>
 
-    <string name="litecraft_font">LifeCraft_Font.ttf</string>
-    <string name="litecraft_font_name">LifeCraft_Font</string>
+    <string name="litecraft_font" translatable="false">LifeCraft_Font.ttf</string>
+    <string name="litecraft_font_name" translatable="false">LifeCraft_Font</string>
 
 
-    <string name="leprosy3DFilled_font">Leprosy3DFilled.ttf</string>
-    <string name="leprosy3DFilled_font_name">Leprosy3DFilled</string>
+    <string name="leprosy3DFilled_font" translatable="false">Leprosy3DFilled.ttf</string>
+    <string name="leprosy3DFilled_font_name" translatable="false">Leprosy3DFilled</string>
 
     <!-- Strings related to stats -->
-    <string name="stats_text">Number of Reviews:0\nNumber of Chapters memorized:0</string>
-    <string name="psalm_1_1">Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful</string>
+    <string name="stats_text" translatable="false">Number of Reviews:0\nNumber of Chapters memorized:0</string>
+    <string name="psalm_1_1" translatable="false">Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful</string>
 
     <!-- Strings related to answer page -->
     <string name="title_activity_answer">Answer</string>
     <string name="sample_question">I\'m confused. Where do I get an overview?</string>
     <string name="sample_answer">First, you\'ll add a section of the Bible that you want to memorize. Once you press ADD the app will break down the section into chunks of equal size(you can change the chunk size in the settings menu). Then as you memorize the chunks that are assigned to you daily, you will click on the chunk and review by reciting the verses of that chunk. Depending upon how accurate you recite it, the next date of review will be extended. In the Bible which is integrated, the verses you\'ve memorized will appear GREEN, and verses added for memorization will appear YELLOW.</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login" translatable="false">Sign in</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_password" translatable="false">Password (optional)</string>
+    <string name="action_sign_in" translatable="false">Sign in or register</string>
+    <string name="action_sign_in_short" translatable="false">Sign in</string>
+    <string name="error_invalid_email" translatable="false">This email address is invalid</string>
+    <string name="error_invalid_password" translatable="false">This password is too short</string>
+    <string name="error_incorrect_password" translatable="false">This password is incorrect</string>
+    <string name="error_field_required" translatable="false">This field is required</string>
+    <string name="permission_rationale" translatable="false">"Contacts permissions are needed for providing email
         completions."</string>
-    <string name="log_out">Log out</string>
-    <string name="anonymous_sign_in">Anonymous Sign In</string>
-    <string name="girdthysword">GirdThySword</string>
+    <string name="log_out" translatable="false">Log out</string>
+    <string name="anonymous_sign_in" translatable="false">Anonymous Sign In</string>
+    <string name="girdthysword" translatable="false">GirdThySword</string>
 
     <!-- Strings related to Profile -->
-    <string name="joel_kingsley">Joel Kingsley</string>
-    <string name="my_email">joelkingsley.r@gmail.com</string>
+    <string name="joel_kingsley" translatable="false">Joel Kingsley</string>
+    <string name="my_email" translatable="false">joelkingsley.r@gmail.com</string>
 
     <!-- Strings related to about page -->
-    <string name="girdthyswordapp">\@girdthyswordapp</string>
-    <string name="round_logo_desc">Round logo</string>
-    <string name="rate_our_app">Rate our App</string>
-    <string name="report_a_bug">Report a Bug</string>
-    <string name="send_us_feedback">Send us Feedback</string>
-    <string name="joel_kingsley_details">Joel Kingsley\n<a href="http://joelkingsley.wordpress.com">http://joelkingsley.wordpress.com</a></string>
-    <string name="karthikeyan_details">Karthikeyan\n<a href="http://karthikeyan210.wordpress.com">http://karthikeyan210.wordpress.com</a></string>
-    <string name="murali_krishna_details">Murali Krishna</string>
+    <string name="girdthyswordapp" translatable="false">\@girdthyswordapp</string>
+    <string name="round_logo_desc" translatable="false">Round logo</string>
+    <string name="rate_our_app" translatable="false">Rate our App</string>
+    <string name="report_a_bug" translatable="false">Report a Bug</string>
+    <string name="send_us_feedback" translatable="false">Send us Feedback</string>
+    <string name="joel_kingsley_details" translatable="false">Joel Kingsley\n<a href="http://joelkingsley.wordpress.com">http://joelkingsley.wordpress.com</a></string>
+    <string name="karthikeyan_details" translatable="false">Karthikeyan\n<a href="http://karthikeyan210.wordpress.com">http://karthikeyan210.wordpress.com</a></string>
+    <string name="murali_krishna_details" translatable="false">Murali Krishna</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tab1">OVERDUE</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="tab1" translatable="false">OVERDUE</string>
     <string name="title_activity_select_version">Select Version</string>
-    <string name="title_activity_main_screen">MainScreen</string>
+    <string name="title_activity_main_screen" translatable="false">MainScreen</string>
 
 
     <!-- Clean -->
     <string name="chapter_with_num">Chapter %1$d</string>
-    <string name="bookname_with_num">%1$s %2$d</string>
-    <string name="scroll_indicator"><![CDATA[< >]]></string>
-    <string name="start_scroll_indicator"><![CDATA[>]]></string>
-    <string name="end_scroll_indicator"><![CDATA[<]]></string>
+    <string name="bookname_with_num" translatable="false">%1$s %2$d</string>
+    <string name="scroll_indicator" translatable="false"><![CDATA[< >]]></string>
+    <string name="start_scroll_indicator" translatable="false"><![CDATA[>]]></string>
+    <string name="end_scroll_indicator" translatable="false"><![CDATA[<]]></string>
     <string name="language">Language</string>
     <string name="overdue">OVERDUE</string>
     <string name="today">TODAY</string>
     <string name="all">ALL</string>
-    <string name="english_iso">eng</string>
-    <string name="tamil_iso">tam</string>
-    <string name="default_display_name">Joel Kingsley</string>
+    <string name="english_iso" translatable="false">eng</string>
+    <string name="tamil_iso" translatable="false">tam</string>
+    <string name="default_display_name" translatable="false">Joel Kingsley</string>
     <string name="home">Home</string>
     <string name="stats">Stats</string>
     <string name="leaderboard">Leaderboard</string>
@@ -146,14 +149,14 @@
     <string name="add_section">Add Section</string>
     <string name="bible">Bible</string>
     <string name="default_level">Lvl. %1d (%2s)</string>
-    <string name="default_verses_memorized">999999</string>
-    <string name="default_score">999999</string>
+    <string name="default_verses_memorized" translatable="false">999999</string>
+    <string name="default_score" translatable="false">999999</string>
     <string name="verses_memorized_text">Verses Memorized</string>
     <string name="score_text">Score</string>
     <string name="click_to_log_out_and_exit">Click to Log out and Exit</string>
     <string name="help">Help</string>
     <string name="settings">Settings</string>
-    <string name="build_no">Build 1.9</string>
+    <string name="build_no">Build 2.0</string>
     <string name="retain">Memorize the Bible</string>
     <string name="read_and_listen">Read the Bible</string>
 

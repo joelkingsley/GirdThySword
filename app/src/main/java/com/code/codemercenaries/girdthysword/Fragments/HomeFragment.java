@@ -14,11 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.code.codemercenaries.girdthysword.Activities.DeleteSectionActivity;
+import com.code.codemercenaries.girdthysword.Activities.NewSectionActivity;
 import com.code.codemercenaries.girdthysword.Database.DBHandler;
-import com.code.codemercenaries.girdthysword.DeleteSectionActivity;
-import com.code.codemercenaries.girdthysword.NewSectionActivity;
 import com.code.codemercenaries.girdthysword.R;
-import com.code.codemercenaries.girdthysword.ViewPagerAdapter;
+import com.code.codemercenaries.girdthysword.ViewPagerAdapters.ViewPagerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

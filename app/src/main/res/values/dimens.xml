@@ -12,7 +12,7 @@
 
     <dimen name="horizontal_scroll_indicator_size">20dp</dimen>
     <dimen name="profile_margin">5dp</dimen>
-    <dimen name="profile_size">60dp</dimen>
+    <dimen name="profile_size">50dp</dimen>
     <dimen name="display_name_size">17sp</dimen>
     <dimen name="number_size">30sp</dimen>
     <dimen name="label_size">12sp</dimen>

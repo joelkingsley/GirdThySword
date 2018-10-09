@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="com.code.codemercenaries.girdthysword.LoginActivity">
+    tools:context="com.code.codemercenaries.girdthysword.Activities.LoginActivity">
 
 
     <com.google.android.gms.common.SignInButton

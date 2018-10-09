@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.code.codemercenaries.girdthysword.Activities.ReadableVerse;
 import com.code.codemercenaries.girdthysword.Objects.Chunk;
 import com.code.codemercenaries.girdthysword.Objects.Section;
 import com.code.codemercenaries.girdthysword.Objects.Version;
-import com.code.codemercenaries.girdthysword.ReadableVerse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

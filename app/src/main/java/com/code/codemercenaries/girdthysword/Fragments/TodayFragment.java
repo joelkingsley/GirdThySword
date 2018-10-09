@@ -17,11 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.code.codemercenaries.girdthysword.Activities.ReviewActivity;
 import com.code.codemercenaries.girdthysword.Database.DBHandler;
 import com.code.codemercenaries.girdthysword.ListAdapters.CustomListAdapter1;
 import com.code.codemercenaries.girdthysword.Objects.Chunk;
 import com.code.codemercenaries.girdthysword.R;
-import com.code.codemercenaries.girdthysword.ReviewActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

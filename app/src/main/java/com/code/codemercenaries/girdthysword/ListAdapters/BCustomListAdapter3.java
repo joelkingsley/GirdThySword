@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.code.codemercenaries.girdthysword.Activities.ReadableVerse;
 import com.code.codemercenaries.girdthysword.R;
-import com.code.codemercenaries.girdthysword.ReadableVerse;
 
 import java.util.List;
 

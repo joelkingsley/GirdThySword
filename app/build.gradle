@@ -6,7 +6,7 @@ android {
         applicationId "com.code.codemercenaries.girdthysword"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 5
+        versionCode 6
         versionName '2.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -14,7 +14,7 @@ android {
                 cppFlags ""
             }
         }
-        versionNameSuffix 'beta'
+        versionNameSuffix 'release'
     }
     buildTypes {
         release {
@@ -65,8 +65,6 @@ dependencies {
     compile 'com.daimajia.numberprogressbar:library:1.4@aar'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'commons-io:commons-io:2.4'
-
-
     testCompile 'junit:junit:4.12'
 }
 

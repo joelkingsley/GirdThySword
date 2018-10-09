@@ -19,10 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.code.codemercenaries.girdthysword.Activities.ReadableVerse;
 import com.code.codemercenaries.girdthysword.Database.DBHandler;
 import com.code.codemercenaries.girdthysword.ListAdapters.BCustomListAdapter3;
 import com.code.codemercenaries.girdthysword.R;
-import com.code.codemercenaries.girdthysword.ReadableVerse;
 
 import java.util.ArrayList;
 import java.util.List;

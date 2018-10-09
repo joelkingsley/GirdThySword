@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        tools:context="com.code.codemercenaries.girdthysword.AnswerScreenActivity">
+        tools:context="com.code.codemercenaries.girdthysword.Activities.AnswerScreenActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -14,11 +14,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.code.codemercenaries.girdthysword.Activities.VerseListScreenActivity;
 import com.code.codemercenaries.girdthysword.Database.DBHandler;
 import com.code.codemercenaries.girdthysword.ListAdapters.BCustomListAdapter2;
 import com.code.codemercenaries.girdthysword.Objects.ChapterDetail;
 import com.code.codemercenaries.girdthysword.R;
-import com.code.codemercenaries.girdthysword.VerseListScreenActivity;
 
 import java.util.ArrayList;
 import java.util.List;
